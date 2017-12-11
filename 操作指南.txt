@@ -1,5 +1,6 @@
 ﻿1、上官网下载git并安装。
 2、进入命令行运行
+        $ git init
 	$ git config --global user.name ""Your Name""
 	$ git config --global user.email ""email@example.com""。
 	每下载一个git都会要验证身份。"
@@ -21,7 +22,9 @@
 16、git checkout read.txt:还原删除文件。
 17、git rm read.txt:删除在版本区中的文件。
 
-git和github之间的连接：先使用sshKey在GitHub上添加。
+git和github之间的连接：
+先使用ssh-keygen -t rsa -C "460131185@qq.com"下载sshKEY。
+先使用sshKey在GitHub上添加。
 1、git remote rm origin在连接错误时清除关联
 2、我是用的重新创建一个repository，使他和本地仓库名字一致。都是myrepository
 3、先把工作区的修改添加到版本区中，即add-->commit.
