@@ -1,0 +1,28 @@
+*{
+    padding:0;
+    margin:0;
+}
+body{
+    overflow: hidden;
+}
+/* 小鸟 */
+#birds{
+    /* 要让鸟飞，必须要脱离文档流 */
+    /* 可以使用定位 */
+    float:left;
+    margin-left:10px;
+    margin-top:0px;
+}
+/* 小鸟结束 */
+
+/* 变换方位 */
+.fx_38{
+    transform:rotate(60deg);
+}
+.fx_39{
+    transform:rotateY(180deg);
+}
+.fx_40{
+    transform:rotate(-60deg);
+}
+/* 变换方位 */
