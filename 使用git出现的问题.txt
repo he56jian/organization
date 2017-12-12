@@ -1,0 +1,13 @@
+1、错误failed to push some refs to 'git@github.com:he56jian/organization.git'
+步骤：刚开始我是创建一个文件夹，然后add+commit，在push就出现问题了。
+	（原因是：我之前把本地仓库的一个文件删除了。）
+	但是当时没想到那里。就网上找解决方案并参照进行。
+	在远程库中添加REMADE.md。本地pull.都不行。
+	后面找到一篇说是网上仓库和本地仓库不一致。有两个分支导致。
+	然后我就使用git status查找当前状态，发现当前状态正在运行一个操作。rebase in progress:onot c4e4db5
+	然后我用git log查看这个操作是对应哪个步骤。（原来是删除的步骤，没有完成）
+	然后就用git rm README.md再用git rebase --continue就可以了。之后就可以正常上传本地的修改情况。
+	
+	
+好吧，总结的很乱。但是在git里面有介绍的，可以看下面的注释来进行操作。多用git status查看当前什么状态。
+然后在输入栏前面一行后面有个（master | REBASE 2/2）应该就是说正在处理的进程。
