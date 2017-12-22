@@ -1,16 +1,17 @@
-var zz=document.getElementById('zz');
-var kq=document.getElementsByClassName('kq')[0];
+var zz=document.getElementsByClassName('zz')[0];
+document.get
 var state=0;//设置状态，0为没动，1为转动。2为不在0位置。
 zz.onclick=function(){
     if(state==0){
-        zz.className='kq';//当当前状态静止时，添加class，转动。
-       
+        zz.className='zz kq';//当当前状态静止时，添加class，转动。
         state=1;
-    }else if(state==1){  //
-        zz.className='pause';
-        var jd=jiaodu(zz);
-        jl(jd);  
+    }else if(state==1){  
+        zz.className='zz pause';
+		var jd=jiaodu(zz);
+		jl(jd);
+		
         state=0;
+        
     }
     
 };
@@ -50,9 +51,9 @@ function jiaodu(transfrom){
 function jl(jd){
         
         if(jd>=0 && jd<20){
-            alert("恭喜获得五等奖！");
+            tc("恭喜获得五等奖！");
         }else if(jd>=20 && jd<46){
-            alert("恭喜获得六等奖！");
+            tc("恭喜获得六等奖！");
         }else if(jd>=46 && jd<56){
             alert("恭喜获得二等奖！");
         }else if(jd>=56 && jd<85){

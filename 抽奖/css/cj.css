@@ -15,14 +15,14 @@
 }
 /* 转盘结束 */
 /* 指针 */
-#cj>#zz{
+#cj .zz{
     position:absolute;
     width:32%;
     top:86px;
     left:136px;
     transform-origin: 50.23% 64.32%;
 }
-#zz.kq{
+.kq{
     animation:run 50.5s linear infinite;
     
 }
@@ -38,6 +38,7 @@
 .pause{
     animation:run 50.5s linear infinite;
     animation-play-state: paused;
+	
 }
 
 
