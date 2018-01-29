@@ -1,0 +1,60 @@
+*{
+    padding:0px;
+    margin:0px;
+    font-size:20px;
+    font-family: '微软雅黑';
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+}
+#pic{
+    margin-top:100px;
+    width:2000px;
+    height:500px;
+}
+#pic ul li{
+    float:left;
+    width:100px;
+    height:500px;
+}
+/* 文字 */
+#pic .wz{
+    width:100px;
+    height:500px;
+    background:rgba(0,0,0,.5);
+    
+}
+#pic .wz .p1{
+    float: left;
+    width:20px;
+    color:rgba(255,255,255,.5);
+    padding:10px;
+    margin-top:10px;
+}
+#pic .wz .p2{
+    float: left;
+    width:20px;
+    font-size: 10px;
+    color:rgba(255,255,255,.5);
+    padding:10px;
+    margin-top:20px;
+}
+/* 文字结束 */
+#pic ul li.nn{
+    background:url('../image/南宁.jpg') no-repeat;
+    
+    
+}
+#pic ul li.wuz{
+    background:url('../image/梧州.jpg') no-repeat;
+
+}
+#pic ul li.sz{
+    background:url('../image/深圳.jpg') no-repeat;
+
+}
+#pic ul li.hn{
+    background:url('../image/湖南.jpg') no-repeat;
+    width:700px;
+}
