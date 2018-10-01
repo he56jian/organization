@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片碎片化翻转</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/animationRunning.js"></script>
+    <script src="js/tween.js"></script>
+</head>
+<body>
+<div id="box">
+    <ul class="piclist"></ul>
+</div>
+<div id="remove">消失</div>
+<div id="callback">回来</div>
+<div></div>
+</body>
+
+<script>
+	//1、首先，先要获取放置图片的位置；
+	//2、知道要碎片成X*Y ，创建X*Y个图片；
+	//3、要移动图片，需要知道图片宽高；先获取图片宽高；然后宽/x、高/y为每个小图的宽高；创建图片；
+	//4、获取两个按键；给每个按键添加点击事件；
+	//5、创建一个动画效果事件，根据动画元素、动画方式、动画时间来时元素运动；
+
+	let _box = document.getElementById('box')
+	let _picList = _box.getElementsByClassName('piclist')[0]
+
+
+	let _picItemW = _box.offsetWidth / 10;
+	let _picItemH = _box.offsetHeight / 10;
+
+	//假设是获取10*10个
+	for (let i = 0; i < 10; i++) {      //行
+		for (let j = 0; j < 10; j++) {
+			let _picItem = document.createElement('li')
+			_picItem.style.width = _picItemW + 'px';
+			_picItem.style.height = _picItemH + 'px';
+			_picItem.style.backgroundPosition = -j * _picItemW + 'px ' + -i * _picItemH + 'px';
+			_picList.appendChild(_picItem)
+		}
+	}
+
+	let _reBtn = document.getElementById('remove')
+	_reBtn.onclick = function () {
+		let _picItem = _picList.getElementsByTagName('li')
+		let eL = _picItem.length;
+		for (let i = 0; i < eL; i++) {
+			animationRunning(_picItem[i], {
+				transform:{
+					rotateX:randomNum(-360,360),
+					rotateY:randomNum(-360,360),
+                },
+				left: randomNum(-200, 200),
+				top: randomNum(-200, 200),
+				opacity: 1
+			}, {
+				duration: 1000
+			});
+		}
+	}
+	
+	let _callBtn = document.getElementById('callback');
+	_callBtn.onclick = function () {
+		let _picItem = _picList.getElementsByTagName('li')
+		let eL = _picItem.length;
+		for (let i = 0; i < eL; i++) {
+			animationRunning(_picItem[i], {
+				transform:{
+					rotateX:0,
+					rotateY:0
+				},
+				left: 0,
+				top: 0,
+				opacity: 1
+			}, {
+				duration: 1000
+			})
+		}
+	}
+</script>
+
+
+</html>
