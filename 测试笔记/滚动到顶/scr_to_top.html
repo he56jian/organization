@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>返回顶部</title>
+    <style>
+        body, div, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        #wrap {
+            width: 1220px;
+            margin: 100px auto;
+        }
+
+        #wrap div {
+            height: 500px;
+            margin-bottom: 10px;
+            border: 1px solid red;
+        }
+
+        #side {
+            position: fixed;
+            top: 100px;
+            right: 100px;
+            width: 50px;
+            border: 1px solid;
+        }
+
+        #side li {
+            height: 30px;
+            padding: 10px;
+            font-size: 13px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #side .active {
+            background-color: #0ab;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div class="item">1</div>
+    <div class="item">2</div>
+    <div class="item">3</div>
+    <div class="item">4</div>
+    <div class="item">5</div>
+    <div class="item">6</div>
+    <div class="item">7</div>
+    <div class="item">8</div>
+</div>
+<ul id="side">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>返回顶部</li>
+</ul>
+</body>
+<script>
+	var btn_item = document.querySelectorAll('#side li'),
+		length = btn_item.length;
+	for (var i = 0; i < length; i++) {
+		btn_item[i].index = i;
+		btn_item[i].state = 0;      //设置状态变量，判断是否选中
+
+        btn_item[i].onmouseenter = function () {
+			this.className = 'active';
+		}
+		btn_item[i].onmouseleave = function () {
+			if (this.state) {
+			} else {
+				this.className = ' ';
+
+			}
+		}
+
+
+		var changeY = 0;
+		var mScroll = [];
+		btn_item[i].onclick = function () {
+			clearInterval(mScroll);
+			console.log(mScroll);
+			for (var i = 0; i < length; i++) {
+				btn_item[i].className = ' ';
+				btn_item[i].state = 0;
+
+			}
+			this.state = 1;
+			var maxScrollY = this.index * 512 + 100;//最后要到达的高度
+			// console.log(maxScrollY);
+			if (this.index != length - 1) {
+				this.className = 'active';
+
+				// 首先判断当前的高度与要达到的高度只差
+				var addNum = maxScrollY - changeY;
+				if (addNum > 0) {              //当前值小于需求值时，采用加号
+					mScroll = setInterval(function () {
+						if (changeY >= maxScrollY) {
+							clearInterval(mScroll);
+							changeY = maxScrollY;
+						} else {
+							console.log(changeY);
+							changeY += 10;
+						}
+						window.scrollTo(0, changeY);
+					}, .1);
+				} else {
+					mScroll = setInterval(function () {
+						if (changeY <= maxScrollY) {
+							clearInterval(mScroll);
+							changeY = maxScrollY;
+						} else {
+							console.log(changeY);
+							changeY -= 10;
+						}
+						window.scrollTo(0, changeY);
+					}, .1);
+				}
+
+
+			} else {
+				this.className = '';
+				maxScrollY = 0;
+				mScroll = setInterval(function () {
+					if (changeY <= maxScrollY) {
+						clearInterval(mScroll);
+						changeY = maxScrollY;
+					} else {
+						console.log(changeY);
+						changeY -= 10;
+					}
+					window.scrollTo(0, changeY);
+				}, .1);
+			}
+		}
+	}
+
+
+	// window.onscroll = function(){
+	//   // console.log(this.scrollY);            //获取当前滚动条的位置
+	//
+	// }
+</script>
+</html>

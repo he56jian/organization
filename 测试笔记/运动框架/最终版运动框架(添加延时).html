@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>最终版运动框架</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            margin: 100px auto;
+            width: 100px;
+            height: 100px;
+            background-color: #63a35c;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<div></div>
+<script>
+	//由于之前的旋转值是写死的，不灵活。而且没有延时执行，没有运动曲线的设置，故稍做修改
+
+	var oBox = document.getElementsByTagName('div')[0],
+		attrObj = {
+			width: 500,
+			height: '500',
+			opacity: 0.5,
+			transform: function (time, key) {
+				this.style[key] = 'rotate(' + 360 * time + 'deg)';
+			}
+		},
+		animationTime = {
+			duration: 1000,       //动画时间
+			delay:1000            //延时时间
+		};
+
+
+	endAnimation(oBox, attrObj, animationTime, function () {
+		endAnimation(oBox, {
+			width: 300,
+			height: 100,
+			'background-color': function (time, key) {
+				//设置Math.random()*255后，在内联函数中没有存在background-color
+				//设置了time *255后，在内联样式中存在background-color，但是样式值并不是变量值。
+				//是由于颜色不能设置为小数，如果设置为小数，则浏览器不会解析，会当做不存在。
+				// var cChange1 = Math.ceil(Math.random() * 255);
+				var cChange2 = Math.ceil(time * 255);
+				// this.style[key] = `rgb(${cChange2},${cChange2},${cChange2})`;
+				this.style[key] = 'rgb('+cChange2+','+cChange2+','+cChange2+')';//由于在IE中，不能使用es6的模板字符串，所以用回原来的
+				// console.log(key,this,this.style[key]);
+			},
+			transform: function (time, key) {
+				this.style[key] = 'rotate(' + 360 * time + 'deg)';
+			}
+		}, {
+			duration: 5000,
+			delay: 1000
+		});
+	});
+
+	//根据时间来设置动画
+	//需要获取的值有，1、节点对象；2、需要修改的参数；3、总共花费时间；4、回调函数
+	function endAnimation(ele, attr, animationTime, callback) {
+		// 获取最开始时间
+		var startData = new Date().getTime();
+		//用于存放数据开始及结束的值
+		var attrVal = {};//每次都要清空，否则之前的参数还是会出现
+		// 获取初始值
+		for (var key in attr) {
+			if (typeof attr[key] === "function") {
+				attrVal[key] = attr[key];
+			} else {
+				var _start= parseFloat(getStyle(ele)[key]) || 0;
+				var _change = attr[key] - parseFloat(getStyle(ele)[key]);
+				attrVal[key] = {                                     //开始值和结束值，如果设置为改变值
+					start: _start,  //如果获取初始值没有则为0
+					end: attr[key],                                 //结束值
+                    change:_change
+				}
+			}
+		}
+		// console.log(ele);
+		fn();
+
+		//动画函数
+		function fn() {
+			if (animationTime.delay > 0) {       //首先要判断是否有延迟,如果设置了延迟为0，-1之类的也会出现错误，所以要大于0
+				(function nullFn() {
+					if (new Date().getTime() - startData < animationTime.delay) {
+						requestAnimationFrame(nullFn);
+					} else {
+						startData = new Date().getTime();   //获取的是延时过后开始的时间。
+						run(); //动画运行方法
+					}
+				})();
+			} else {
+				run();
+			}
+		}
+
+
+		function run() {
+			//时间比例，已过时间/总时间 = 已过路程/ 总路程
+			var changeTimeScale = (new Date().getTime() - startData) / animationTime.duration;
+			// 当时间比例大于等于1时，就说明时间已过最大值
+			if (changeTimeScale >= 1) {
+				setStyle(ele, attrVal, 1);
+				callback && callback();
+			} else {
+				setStyle(ele, attrVal, changeTimeScale);
+				requestAnimationFrame(run);
+			}
+		}
+	}
+
+	//设置参数，传入要设置的节点，以及要设置的属性
+	function setStyle(ele, attrval, time) {
+		for (var key in attrval) {
+			var step = time * attrval[key].change;         //已过路程 = 已过时间/总时间 *总路程。
+			// attrval[key].start < attrval[key].change || (step = -step);
+
+			if (key === 'opacity') {
+				ele.style[key] = step + attrval[key].start;
+			} else if (typeof attrval[key] === "function") {
+				attrval[key].call(ele, time, key);
+			}
+			else {
+				ele.style[key] = step + attrval[key].start + 'px';
+			}
+		}
+	}
+
+
+    //获取初始样式
+	function getStyle(ele) {
+		return ele.currentStyle || getComputedStyle(ele);
+	}
+
+</script>
+</body>
+</html>

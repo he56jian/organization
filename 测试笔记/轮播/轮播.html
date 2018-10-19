@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播框架</title>
+    <style>
+        body, div, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        #wrap {
+            overflow: hidden;
+            position: relative;
+            width: 512px;
+            height: 320px;
+            margin: 100px auto;
+            border: 1px solid red;
+        }
+
+        #wrap .banner {
+            position: absolute;
+            width: 800%;
+            height: 320px;
+            font-size: 0;
+        }
+
+        #wrap .banner > li {
+            float: left;
+        }
+
+        #wrap .banner > li img {
+            width: 512px;
+            height: 320px;
+        }
+
+        #wrap div {
+            position: absolute;
+            bottom: 0;
+            top: 0;
+            width: 20px;
+            height: 50px;
+            margin: auto;
+            padding: 10px;
+            background-color: rgba(111, 111, 111, 0.2);
+            color: #ffffff;
+            font-size: 20px;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #wrap div:hover {
+            background-color: rgba(111, 111, 111, .5);
+        }
+
+        .back {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+        }
+
+        .icon { /*小圆球*/
+            display: flex;
+            position: absolute;
+            right: 0;
+            bottom: 10px;
+            left: 0;
+            width: 300px;
+            margin: auto;
+            justify-content: space-around;
+        }
+
+        .icon li {
+            width: 10px;
+            height: 10px;
+            margin: 10px;
+            background-color: #969896;
+            border: 2px solid lightyellow;
+            border-radius: 50%;
+        }
+
+        .icon li.on,
+        .icon li:hover {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <ul class="banner">
+        <li>
+            <a href=""><img src="images/timg1.jpg" alt=""></a>
+        </li>
+        <li>
+            <a href=""><img src="images/timg2.jpg" alt=""></a>
+        </li>
+        <li>
+            <a href=""><img src="images/timg3.jpg" alt=""></a>
+        </li>
+        <li>
+            <a href=""><img src="images/timg4.jpg" alt=""></a>
+        </li>
+
+    </ul>
+    <div class="back"><</div>
+    <div class="next">></div>
+    <ul class="icon">
+    </ul>
+</div>
+<script>
+	var oBack = document.getElementsByClassName('back')[0],
+		oNext = document.getElementsByClassName('next')[0],
+		oBanner = document.getElementsByClassName('banner')[0],
+		oIcon = document.getElementsByClassName('icon')[0],
+
+		oPicLi = oBanner.querySelectorAll('li'),
+		timer,
+		picLength = oPicLi.length;
+	index = 0;
+	var bool =true;
+	console.log(typeof  bool);
+	var picNumLi = new Array(picLength + 1);
+	oIcon.innerHTML = picNumLi.join('<li></li>');
+	var oIconLi = oIcon.querySelectorAll('li');
+	oIconLi[0].className = 'on';
+
+	oNext.onclick = function () {
+		if (bool) {
+			bool='';
+			//当前图片不是最后一个图片时
+			oIconLi[index].className = '';
+			index++;
+			index %= picLength;
+			oIconLi[index].className = 'on';
+			animation(oBanner, 'left', -512 * index, 10);
+		}
+	}
+	oBack.onclick = function () {
+		if (bool) {
+			bool = '';
+			oIconLi[index].className = '';
+			index--;
+			if (index < 0) {
+				index = picLength - 1;
+			}
+			oIconLi[index].className = 'on';
+			animation(oBanner, 'left', -512 * index, 10);
+		}
+	}
+
+	function animation(ele, attr, value, step, callback) {
+		//获取当前值
+		//当前值添加步长，循环
+		var curValue = parseFloat(getStyle(ele)[attr]);
+		if (curValue > value) {           //当前值小于结束值时，即点击向左。是+
+			step = -step;
+		}
+		status = false;
+		(function run() {           //循环添加步长        当curValue > value时。
+			curValue += step;
+			if (step < 0) {
+				if (curValue > value) {
+					ele.style[attr] = curValue + 'px';
+					timer = requestAnimationFrame(run);
+				} else {
+					curValue = value;
+					ele.style[attr] = curValue + 'px';
+					bool= true;
+				}
+			} else {
+				if (curValue < value) {
+					ele.style[attr] = curValue + 'px';
+					timer = requestAnimationFrame(run);
+				} else {
+					curValue = value;
+					ele.style[attr] = curValue + 'px';
+					bool= true;
+				}
+			}
+		})();
+	}
+
+
+	//获取当前属性
+	function getStyle(ele) {
+		return getComputedStyle(ele) || ele.currentStyle;
+	}
+</script>
+</body>
+</html>

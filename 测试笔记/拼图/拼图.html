@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>拼图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #wrap {
+            width: 512px;
+            margin: 20px auto;
+        }
+
+        #gamepic {
+            background: url("images/1.jpg") center/512px 380px no-repeat;
+        }
+
+        #gamebody {
+            margin-top: 10px;
+            border: 1px solid;
+        }
+
+        #gamebody i {
+            float: left;
+        }
+
+        #gamebody i.empty {
+            background: rgba(0, 0, 0, 0);
+            background-image: none !important;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div id="gamepic">
+    </div>
+    <div id="gamebody">
+    </div>
+</div>
+<script>
+	var oGamePic = document.getElementById('gamepic'),
+		oGameBody = document.getElementById('gamebody'),
+		oGameI = oGameBody.getElementsByTagName('i'),
+		oEmpty = null,  //用来存放最后一个空文件
+		image = ['images/1.jpg'];
+
+	//栅格参数
+	var oItemi = [],   //用来存放数组
+		index = 0,
+		boxAttr = {      //body参数
+			width: 512,
+			height: 380,
+		},
+		grid = {            //设置行数和列数
+			colum: 3,       //行
+			list: 3,
+		},
+		itemattr = {         //设置的i的样式
+			width: boxAttr.width / grid.list,
+			height: boxAttr.height / grid.colum,
+		};
+
+
+	// 首先设置图片和拼图宽高
+	setStyle(oGamePic, boxAttr);
+	setStyle(oGameBody, boxAttr);
+
+	//生成节点
+	for (var i = 0; i < grid.list; i++) {  //生成行
+		for (var j = 0; j < grid.colum; j++) {    //生成列
+			var oI = document.createElement('i'),
+				//要设置的每个的样式。
+				oIattr = {
+					width: itemattr.width,
+					height: itemattr.height,
+					backgroundImage: 'url(' + image[index] + ')',
+					backgroundSize: boxAttr.width + 'px ' + boxAttr.height + 'px',
+					backgroundPosition: j * -itemattr.width + 'px ' + i * -itemattr.height + 'px'
+				}
+			setStyle(oI, oIattr);
+
+			//创建一个对象，存放oI的正确标识，和当前标识
+			oI.index = {
+				current: i * grid.colum + j,        //当前位置
+				address: i * grid.colum + j         //正确位置
+			}
+
+
+			if (i * grid.colum + j === grid.list * grid.colum - 1) {//如果是最后一个，则不添加到oGameBody中。
+				oI.className = 'empty';
+				oEmpty = oI;
+			    oEmpty.index.address = grid.list * grid.colum - 1;      //设置正确的位置。
+			} else {
+				oItemi.push(oI);//把每一块都添加到oitemi数组中。
+                //oItemi是保存i元素的数组，用于随机更换位置。
+				oItemi.sort(function () {
+					return Math.random() - 0.5;//随机-0.5-0.5之间
+				});
+				oI.onclick = function () {
+					move(this,oEmpty);
+				}
+			}
+		}
+	}
+		//要把变换位置的i节点添加到盒子里。
+		for (var i = 0; i < oItemi.length; i++) {
+			oItemi[i].index.current = i;
+			oGameBody.appendChild(oItemi[i]);
+		}
+		oGameBody.appendChild(oEmpty);
+
+
+//判断是否能移动后，移动
+	function move(eleA,mEmpty) {
+        //如果空的在右边
+		if(oGameI[eleA.index.current + 1] === mEmpty && eleA.index.current % grid.list !== 2){
+			oGameBody.insertBefore(mEmpty,eleA);       //把空的放到eleA 的前面
+            var newCurrent = swapNum(eleA.index.current,mEmpty.index.current);
+            // // 更新信息
+            up.call(eleA,mEmpty);
+		}else if(oGameI[eleA.index.current - 1] === mEmpty && eleA.index.current % grid.list !== 0 ){   //点击的块在空的后一个。
+			oGameBody.insertBefore(eleA,mEmpty);       //在当前位置前插入空的
+			var newCurrent = swapNum(eleA.index.current,mEmpty.index.current);
+			up.call(eleA,mEmpty);
+		}else if(eleA.index.current + grid.list === mEmpty.index.current ){   //点击的在空的上面
+			var thisPos = eleA.index.current;
+			oGameBody.insertBefore(eleA,mEmpty);       //在空的位置前插入点击的元素的
+            oGameBody.insertBefore(mEmpty,oGameI[thisPos]);//把空的放到之前的位置的前面
+			up.call(eleA,mEmpty);
+        }else if(eleA.index.current - grid.list=== mEmpty.index.current ){//点击的在空的下面
+			var thisEmp = mEmpty.index.current;           //获取空的元素的位置。 获取前面一个的元素的位置，如果获取的是后面面一个元素的位置，是否可以？不可以，因为如果要获取后面的位置的话，要+1，添加，会出现数组越界。
+			oGameBody.insertBefore(mEmpty,eleA);       //在点击的元素位置前插入空的元素，
+			oGameBody.insertBefore(eleA,oGameI[thisEmp]);//把空的放到之前的位置的前面
+			up.call(eleA,mEmpty);
+        }
+	}
+
+	//更新位置信息,并判断是否接受
+	function up(eleB) {
+		var newCurrent = swapNum(this.index.current,eleB.index.current);
+		this.index.current = newCurrent.n;
+		oEmpty.index.current = newCurrent.m;
+		endGame();
+	}
+	//交换位置。
+	function swapNum(n,m) {
+		n = n + m;
+		m = n - m;
+		n = n - m;
+		return {
+			n:n,
+            m:m
+        }
+	}
+
+	//设置样式
+	function setStyle(ele, attr) {
+		var emAttr = ['width', 'height'];
+		for (var key in attr) {
+			if (emAttr.indexOf(key) != -1) {  //即是width或者height属性。
+				ele.style[key] = attr[key] + 'px';
+			} else {
+				ele.style[key] = attr[key];
+			}
+		}
+	}
+
+	function endGame() {
+       var endIndex = 0;
+		checkEnd();
+		function checkEnd() {
+			if(endIndex <= oItemi.length-1){
+				if(oItemi[endIndex].index.current === oItemi[endIndex].index.address){
+					// console.log(oItemi[endIndex].index.current,oItemi[endIndex].index.address);
+					endIndex++;
+					checkEnd();
+				// }else{
+				// 	return false;
+                }
+            }else{
+				alert('游戏结束');
+				return true;
+            }
+
+		}
+
+	}
+</script>
+</body>
+</html>

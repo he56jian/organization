@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="tween.js"></script>
+    <script src="animationRunning.js"></script>
+    <style>
+        body, div, ul, li, a, img, span {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none
+        }
+
+        #wrap {
+            overflow: hidden;
+            position: relative;
+            margin: 100px auto;
+            width: 1000px;
+            border: 1px solid;
+        }
+
+        .banner {
+            width: 1000%;
+        }
+
+        .banner .ban_pic {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .banner .ban_pic li {
+            float: left;
+            width: 10%;
+        }
+
+        .banner .ban_pic li a,
+        .banner .ban_pic li img {
+            width: 100%;
+            vertical-align: middle;
+        }
+
+        .btn {
+            position: absolute;
+            bottom: 50%;
+            margin: auto;
+            width: 100%;
+            height: 0;
+            text-align: center;
+        }
+
+        .btn span {
+            float: left;
+            padding: 10px;
+            height: 50px;
+            line-height: 50px;
+            background-color: rgba(255, 255, 255, .5);
+            font-size: 30px;
+            color: #121212;
+            cursor: pointer;
+        }
+
+        .btn span:hover {
+            background-color: #aaaaaa;
+        }
+
+        .btn span + span {
+            float: right;
+        }
+
+        .poit {
+            position: absolute;
+            width: 100%;
+            bottom: 10px;
+            text-align: center;
+        }
+
+        .poit li {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 10px;
+            background-color: #212020;
+            border-radius: 50%;
+        }
+
+        .poit li:hover,
+        .poit li.on {
+            background-color: #a0a0a1;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div class="banner">
+        <ul class="ban_pic">
+            <li><a href=""><img src="images/timg7.jpg" alt=""></a></li>
+            <li><a href=""><img src="images/timg6.jpg" alt=""></a></li>
+            <li><a href=""><img src="images/timg5.jpg" alt=""></a></li>
+            <li><a href=""><img src="images/timg4.jpg" alt=""></a></li>
+        </ul>
+    </div>
+    <div class="btn">
+        <span class="back">&lt;</span>
+        <span class="next">&gt;</span>
+    </div>
+    <ul class="poit">
+
+    </ul>
+</div>
+<script>
+	// 先要获取节点，需要的第一是要移动的节点
+	var oBan_pic = document.getElementsByClassName('ban_pic')[0],
+		oShowPic = oBan_pic.getElementsByTagName('img'),
+		//获取其遮罩节点，用于判断移动距离
+		_length = oShowPic[0].offsetWidth,
+		picNum = oShowPic.length,
+		//获取要点击的按键节点
+		oBtn = document.getElementsByClassName('btn')[0],
+		oNext = oBtn.getElementsByClassName('next')[0],
+		oBack = oBtn.getElementsByClassName('back')[0],
+		//获取下面的点标识
+		oPoit = document.getElementsByClassName('poit')[0],
+		oLi = oPoit.getElementsByTagName('li'),
+		//设置浏览到的当前位置,用于辨别当前位置（移动到了哪张图片）
+		index = 0,
+		//如果连续点击，有可能会报错，所以添加一个判断，用于阻止连续点击
+		_status = true;
+
+	for (var i = 0; i < picNum; i++) {
+		var oCreatLi = document.createElement('li');
+		oPoit.appendChild(oCreatLi);
+		oLi[i].onclick = function (i) {
+			return function () {
+				if (_status) {
+					_status = false;
+					oLi[index].className = '';
+					index = i;
+					console.log(i);
+					move();
+					oLi[index].className = 'on';
+				}
+			}
+		}(i);
+	}
+	oLi[index].className = 'on';
+	oBan_pic.innerHTML += oBan_pic.innerHTML;
+	oNext.onclick = function () {
+		if (_status) {
+			_status = false;
+			oLi[index].className = '';
+			index++;
+			// 如果运动到最后一个时
+			move();
+			if (index < picNum) {
+				oLi[index].className = 'on';
+			} else {
+				oLi[0].className = 'on';
+			}
+		}
+	}
+	oBack.onclick = function () {
+		if (_status) {
+			_status = false;
+			oLi[index].className = '';
+			index--;
+			if (index < 0) {
+				index = picNum - 1;
+				oBan_pic.style.left = picNum * -_length + 'px';
+			}
+			move();
+			oLi[index].className = 'on';
+		}
+	}
+
+	function move() {
+		animationRunning(oBan_pic, {
+			left: index * -_length,
+		}, {
+			duration: 1000,
+		}, function () {
+			_status = true;
+			if (index > picNum - 1) {
+				index = 0;
+				oBan_pic.style.left = index * _length + 'px';
+			}
+		});
+	}
+
+</script>
+</body>
+</html>

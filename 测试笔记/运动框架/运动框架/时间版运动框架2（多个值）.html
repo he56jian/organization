@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>时间版运动框架</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            margin: 100px;
+            width: 500px;
+            height: 500px;
+            background-color: #df5000;
+            opacity: 0;
+
+        }
+    </style>
+</head>
+<body>
+<div></div>
+</body>
+<script>
+	var oBox = document.getElementsByTagName('div')[0],
+		startKey = {},
+		curVal = 0,
+		changeVal = {
+			width: 100,
+			height: 100,
+			opacity: 1,
+			transform: function (time, end) {
+				console.log(this);
+				this.style[end] = 'rotate(' + 360 * time + 'deg)';
+			}
+		},
+		startData = new Date().getTime();//获取刚开始的时间
+	timeAnimation(oBox, changeVal, 5000);
+	//时间版的运动框架
+	//判断需要传入的参数有，1、要处理的对象（即节点）/2、要处理的参数及结果 4、总共需要的时间(ms) 5、回调函数
+	function timeAnimation(ele, attr, time) {
+		// 先要遍历获取当前值
+		for (var key in attr) {
+			if (typeof attr[key] === 'function') {
+				startKey[key] = attr[key];
+			} else {
+				var startVal = parseFloat(getStyle(ele)[key] || 0);
+				startKey[key] = {
+					startVal: startVal,                          //开始的值
+					speedVal: attr[key] - startVal     //要变化的值
+				};
+			}
+		}
+		console.log(startKey);
+		changeAnimation();
+
+		function changeAnimation() {
+			//获取当前相对于初始消耗的时间
+			var consume = (new Date().getTime() - startData) /time;
+			if (consume >= 1) {
+				consume = 1;
+				setStyle(ele, startKey, consume);
+			} else {
+				setStyle(ele, startKey, consume);
+				requestAnimationFrame(changeAnimation);
+			}
+		}
+	}
+
+	function setStyle(ele, obj, consume) {
+		for (var key in obj) {
+			if (key === 'opacity') {
+				curVal = consume * obj[key].speedVal + obj[key].startVal;
+				ele.style[key] = curVal;
+			} else if (typeof obj[key] === 'function') {
+
+				obj[key].call(ele,consume,key);
+				console.log(consume);
+			} else {
+				curVal = consume * obj[key].speedVal + obj[key].startVal;
+				//根据已过时间获取应该到的位置
+				ele.style[key] = curVal + 'px';
+			}
+		}
+	}
+
+	function getStyle(ele) {
+		return ele.currentStyle || getComputedStyle(ele);   //兼容IE写法
+	}
+
+
+</script>
+</html>

@@ -1,0 +1,179 @@
+@charset "utf-8";
+
+.header{
+	width:100%;
+	min-width:1220px;
+	height:100px;
+	background-color:rgb(0,0,0);
+}
+.header-nav{
+	position:relative;
+	min-width:1200px;
+	width:1200px;
+	height:100px;
+	margin:0 auto;
+}
+.h-nav-tit{
+	position:absolute;
+	top:0;
+	bottom:0;
+	margin:auto;
+	width:50px;
+	height:50px;
+	background-image:url("../images/logo.png");
+	background-position:0 4px;
+	background-size:cover;
+	background-repeat:no-repeat;
+}
+/*导航栏中间选项开始*/
+.h-nav-item{
+	position:absolute;
+	top:0;
+	bottom:0;
+	right:120px;
+	margin:auto;
+	width:800px;
+	height:30px;
+	font-size:0;
+}
+.h-nav-item li{
+	display:inline-block;
+}
+.h-nav-item li a{
+	display:inline-block;
+	padding:0 20px;
+	font-size:15px;
+	line-height:30px;
+}
+
+/*导航栏中间选项开始*/
+
+/*导航栏最右边开始*/
+.h-nav-right{
+	position:absolute;
+	top:0;
+	bottom:0;
+	right:0;
+	width:150px;
+	height:50px;
+	margin:auto;
+	font-size:0;
+}
+.h-nav-right .h-nav-login{
+	position:absolute;
+	left:30px;
+	top:0;
+	bottom:0;
+	width:18px;
+	height:18px;
+	margin:auto;
+	background-image:url("../images/account-icon.png");
+	background-position:-66px -2px;
+	background-repeat:no-repeat;	
+}
+.h-nav-right::before{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:-10px;
+	margin:auto;
+	height:15px;
+	border-left:1px solid rgb(66,66,66);
+	content:"";
+}
+.h-nav-login:hover{
+	background-position:-6px -2px;
+}
+.h-nav-right .h-nav-shopping{
+	position:absolute;
+	right:30px;
+	top:0;
+	bottom:0;
+	width:22px;
+	height:18px;
+	margin:auto;
+	padding-right:8px;
+	background-image:url("../images/account-icon.png");
+	background-position:-64px -23px;
+	background-repeat:no-repeat;
+	vertical-align:bottom;
+}
+.h-nav-shopping::after{
+	position:absolute;
+	right:-20px;
+	width:10px;
+	height:10px;
+	border:5px solid rgb(153,153,153);
+	background-color:rgb(153,153,153);
+	color:rgb(255,255,255);
+	font-size:12px;
+	text-align:center;
+	vertical-align:bottom;
+	line-height:10px;
+	content:"0";
+	border-radius:50%;
+}
+.h-nav-shopping:hover{
+	background-position:-4px -23px;
+}
+.header-nav .shop-hid-h{
+	display:none;
+	position:absolute;
+	right:0;
+	top:36px;
+	width:360px;
+	height:25px;
+}
+.header-nav .shop-hid{
+	display:none;
+	position:absolute;
+	right:0;
+	top:50px;
+	width:360px;
+	height:310px;
+	text-align:center;
+	border:1px solid rgb(208,208,208);
+	background-color:rgb(255,255,255);
+	border-radius:10px;
+	z-index:2;
+}
+.shop-hid .shop-hid-pic{
+	margin-top:80px;
+	width:76px;
+	height:62px;
+}
+.shop-hid .shop-hid-tt{
+	margin-top:30px;
+	font-size:16px;
+}
+.shop-hid .shop-hid-des{
+	margin-top:5px;
+	color:rgb(212,212,212);
+	font-size:12px;
+}
+.header-nav .shop-hid::before{
+	position:absolute;
+	right:35px;
+	top:-19px;
+	width:.8px;
+	border:10px solid rgba(0,0,0,0);
+	border-bottom:10px solid rgb(208,208,208);
+	border-radius:5px;
+	content:"";
+}
+.header-nav .shop-hid::after{
+	position:absolute;
+	right:35px;
+	top:-18px;
+	width:.8px;
+	border:10px solid rgba(0,0,0,0);
+	border-bottom:10px solid rgb(255,255,255);
+	border-radius:5px;
+	content:"";
+}
+.h-nav-shop-all:hover .shop-hid,
+.h-nav-shop-all:hover .shop-hid-h{
+	display:block;
+}
+/*导航栏最右边结束*/
+

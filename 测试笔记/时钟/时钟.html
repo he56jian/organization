@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrap {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 100px auto;
+            border: 1px solid;
+            border-radius: 50%;
+        }
+
+        .wrap div {
+            position: absolute;
+            right: 0;
+            bottom: 50%;
+            left: 0;
+            margin: auto;
+            width: 1px;
+            background-color: black;
+            transform-origin: 50% 100%;
+            border-radius: 50%;
+        }
+
+        .wrap .hou {
+            width: 3px;
+            height: 100px;
+        }
+
+        .wrap .min {
+            width: 2px;
+            height: 150px;
+        }
+
+        .wrap .sec {
+            height: 200px;
+            z-index: 3;
+        }
+
+        .wrap p {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            left: 0;
+            margin: auto;
+            width: 200px;
+            height: 50px;
+            color: #fffdef;
+            background-color: rgba(0, 145, 155, .3);
+            font-size: 40px;
+            text-align: center;
+            line-height: 50px;
+            z-index: 1;
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="hou"></div>
+    <div class="min"></div>
+    <div class="sec"></div>
+    <p class="num_clock"></p>
+</div>
+<script>
+	var hou = document.getElementsByClassName('hou')[0],
+		min = document.getElementsByClassName('min')[0],
+		sec = document.getElementsByClassName('sec')[0],
+		num_clock = document.getElementsByClassName('num_clock')[0],
+		startSec = new Date().getSeconds(),
+		startHou = new Date().getHours(),
+		startMin = new Date().getMinutes(),
+		secAngle = startSec * 6,
+		houAngle = startHou * 30,
+		minAngle = startMin * 6;
+
+
+	hou.style.transform = `rotate(${houAngle}deg)`;
+	min.style.transform = `rotate(${minAngle}deg)`;
+	sec.style.transform = `rotate(${secAngle}deg)`;
+	num_clock.innerText = `${startHou + ':' + startMin + ":" + startSec}`;
+	setInterval(function () {
+		change();
+	}, 1000);
+
+	function change() {
+		var date = new Date(),
+			newSec = date.getSeconds(),
+			newMin = date.getMinutes(),
+			newhou = date.getHours(),
+			showSec = newSec,
+			showMin = newMin,
+			secAngle = newSec * 6,
+			houAngle = newhou * 30,
+			minAngle = newMin* 6;
+        if(newSec <10){
+        	showSec = '0' + newSec;
+        }else{
+        	showSec =newSec;
+        }
+        if(newMin < 10){
+			showMin = '0' + newMin;
+        }else {
+        	showMin = newMin;
+        }
+		if (newSec === 60) {
+			sec.style.transform = `rotate(0)`;
+			min.style.transform = `rotate(${minAngle}deg)`;
+			if (newMin >= 59) {
+				hou.style.transform = `rotate(${houAngle}deg)`;
+			}
+		} else {
+			sec.style.transform = `rotate(${secAngle}deg)`;
+			    num_clock.innerText = `${newhou + ':' + showMin + ":" + showSec}`;
+		}
+	}
+</script>
+</body>
+</html>

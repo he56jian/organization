@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>弹力球全屏跳动</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        div.ball {
+            position: absolute;
+            top: 0;
+            left: 0px;
+            width: 100px;
+            height: 100px;
+            background-color: #00aabb;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<div class='wrap'>
+
+</div>
+<script>
+	var oWrap = document.getElementsByClassName('wrap')[0],
+		oBall = oWrap.getElementsByClassName('ball');
+	var step = [
+		    {stepX:randomNum(1,10),stepY:randomNum(3,10)},
+			{stepX:randomNum(1,10),stepY:randomNum(3,10)},{stepX:randomNum(1,10),stepY:randomNum(3,10)},
+			{stepX:randomNum(1,10),stepY:randomNum(3,10)},{stepX:randomNum(1,10),stepY:randomNum(3,10)},
+			{stepX:randomNum(1,10),stepY:randomNum(3,10)},
+        ],
+        stepX = 0,
+		stepY = 0,
+		newBallList = [],
+		newLeft = [],
+		newTop = [];
+	var winWidth = document.documentElement.clientWidth, //获取浏览器总宽度
+		winHeight = document.documentElement.clientHeight; //获取浏览器总高度
+	createBall(5);
+
+	//弹力球运动，需要对象，步长,横向步长和纵向步长
+	// bounce(newBallList, stepX, stepY);//弹力球运动
+	bounce(newBallList);//弹力球运动
+
+
+	function createBall(num) {
+		for (var i = 0; i < num; i++) {
+			newBallList[i] = document.createElement('div');
+			newBallList[i].className = 'ball';
+			oWrap.appendChild(newBallList[i]);
+		}
+
+	}
+
+
+	//循环设置
+	function bounce(oBall) {
+		var oR = parseFloat(oBall[0].offsetWidth);// 获取球的半径
+		for (var i = 0, iL = oBall.length; i < iL; i++) {
+			oBall[i].stepX = randomNum(0,10);
+			oBall[i].stepY = randomNum(0,10);
+			oBall[i].style.left = randomNum(0,winWidth - oR)+'px';
+			oBall[i].style.top = randomNum(0,winHeight - oR)+'px';
+			//获取当前值
+			running(i,oR);
+		}
+	}
+	function running(i,oR) {
+		(function change() {
+
+			newLeft[i] = oBall[i].offsetLeft;
+			newTop[i] = oBall[i].offsetTop;
+			// //当marginLeft + 球的直径 >= 浏览器总宽度时，步长为负;当marginLeft >=0 时，步长为正，即反弹。
+			if ((newLeft[i] + oR) >= winWidth || newLeft[i] <0 ) {
+				oBall[i].stepX = -oBall[i].stepX;
+			}
+			if ((newTop[i] + oR) >= winHeight || newTop[i] < 0) {
+				oBall[i].stepY = -oBall[i].stepY;
+			}
+			newLeft[i] += oBall[i].stepX;
+			newTop[i] += oBall[i].stepY;
+			if ((newTop[i] + oR) >= winHeight) {
+				newTop[i] = winHeight - oR;
+			}
+			if ((newLeft[i] + oR) >= winWidth) {
+				newLeft[i] = winWidth - oR;
+			}
+			oBall[i].style.left = newLeft[i] + 'px';
+			oBall[i].style.top = newTop[i] + 'px';
+			checkCollision(oBall);
+			requestAnimationFrame(change);
+		})();
+	}
+	//返回n~m的数
+	function randomNum(n, m) {
+		if (n > m) {
+			n = n + m;
+			m = n - m;
+			n = n - m;
+		}
+		return Math.floor(Math.random() * (m - n + 1)) + n;
+	}
+	function checkCollision(oBall) {
+        for(var i = 0,iL = oBall.length;i<iL;i++){
+            for(var j = oBall.length-1;j >i;j--){
+                isCollision(oBall[i],oBall[j]);
+            }
+        }
+	}
+	function isCollision(objA,objB) {
+        var _left = objA.offsetLeft - objB.offsetLeft;
+		var _top =  objA.offsetTop - objB.offsetTop,
+            minDistance = objA.offsetWidth/2 + objB.offsetWidth/2;   //两个球之间的最短距离
+        var  nowDistance = Math.floor(Math.sqrt(_left * _left + _top*_top));//当前两个球的距离
+            if(minDistance >= nowDistance){
+				stepY = objA.stepY;
+				objA.stepY = objB.stepY;
+				objB.stepY = stepY;
+            	stepX = objA.stepX;
+				objA.stepX = objB.stepX;
+				objB.stepX = stepX;
+            }
+
+
+	}
+
+</script>
+</body>
+</html>

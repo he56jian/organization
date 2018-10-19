@@ -1,0 +1,19 @@
+以英文名的前缀找对应的区块：
+
+	banner前缀    头部的轮播图区块
+
+	circle前缀	商品下方的tab切换按钮的背景图区块
+
+	dependent前缀	品牌周边区块
+
+	forum前缀       轮播下方的附属广告
+
+	good-list前缀   热门商品区块
+
+	parts前缀 	净化器及配件区块
+
+	selected前缀 	品牌精选区块
+
+	subbanner	页面底部的一个广告区块
+
+	

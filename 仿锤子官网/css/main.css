@@ -1,0 +1,519 @@
+@charset "utf-8";
+
+.main{
+	width:100%;
+	height:6250px;
+	padding-bottom:30px;
+	background-color:rgb(237,237,237);
+}
+
+/*主体部分头部导航开始*/
+.m-hnav-bg{
+	width:100%;
+	height:100px;
+}
+.m-hnav .m-hnav-tit{
+	position:relative;
+	display:inline-block;
+	line-height:50px;
+	z-index:3;
+}
+.m-hnav .m-hnav-tit a{
+	position:relative;
+	display:inline-block;
+	padding:0px 15px;
+	color:#666;
+	font-size:15px;
+	line-height:20px;
+	vertical-align:middle;
+	z-index:1;
+}
+.m-hnav .m-hnav-tit a:hover{
+	color:#5079d9;
+}
+.m-hnav .m-hnav-tit a.c-507{
+	color:#5079d9;
+}
+.m-hnav .li-disc:before{
+	position:absolute;
+	left:0;
+	top:0;
+	bottom:0;
+	width:3px;
+	height:3px;
+	margin:auto;
+	background-color:rgb(222,222,222);
+	border-radius:50%;
+	vertical-align:middle;
+	content:'';
+	transition:all 1s;
+}
+.m-hnav li .first-item{
+	padding-left:10px;
+}
+.m-hnav-hid{
+	visibility:hidden;
+	position:absolute;
+	top:100px;
+	left:0;
+	width:100%;
+	height:240px;
+	opacity:0;
+	padding-top:100px;
+	background-color:rgb(245,245,245);
+	transition:all 1s;
+	z-index:2;
+}
+/*少个盒子阴影*/
+.m-hnav-hid::before{
+	position:absolute;
+	top:50px;
+	left:0;
+	right:0;
+	margin:auto;
+	width:1200px;
+	height:1px;
+	background-color:rgba(100,100,100,.2);
+	content:"";
+}
+.m-hnav-hid .m-hnav-cont{
+	width:504px;
+	height:200px;
+	margin:0px auto;
+	padding:20px 0;
+}
+.m-hnav-hid .m-hnav-cont a{
+	position:relative;
+	float:left;
+	margin:auto;
+	width:250px;
+	font-size:0;
+	text-align:center;
+}
+.m-hnav-cont img{
+	position:relative;
+	top:0;
+	width:150px;
+	height:150px;
+	transition:top .5s;
+}
+.hnav-cont-r:before{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	width:10px;
+	height:180px;
+	margin:auto;
+	border-left:1px solid rgb(215,215,215);
+	content:'';
+	z-index:3;
+} 
+.m-hnav-cont a:hover img{
+	top:-5px;
+}
+.m-hnav-cont p{
+	font-size:15px;
+}
+.m-hnav .phone:hover ~ .m-hnav-hid,
+.m-hnav .m-hnav-hid:hover	{
+	visibility:visible;
+	opacity:1;
+}
+/*手机前面的那个点不出现了*/
+.m-hnav .phone:hover ~ .li-disc:before{
+	background-color:rgb(122,122,122);
+	z-index:2;
+}
+/*主体部分头部导航结束*/
+
+/*主体部分轮播图开始*/
+.m-crs{
+	position:relative;
+	overflow:hidden;
+	height:490px;
+	margin:0 auto;
+	border-radius:10px;
+}
+.m-crs-pic{
+	position:absolute;
+	top:-20px;
+	left:0;
+	width:3660px;
+	height:534px;
+}
+.m-crs-pic li{
+	display:inline-block;
+	float:left;
+	border-radius:10px;
+}
+.m-crs-pic li a{
+	display:inline-block;
+	width:1220px;
+	height:534px;
+}
+.m-crs-pic .crs-pic1{
+	background:url("../images/banner1.webp") 0/cover no-repeat;
+}
+.m-crs-pic .crs-pic2{
+	background:url("../images/banner2.webp") 0/cover no-repeat;
+}
+.m-crs-pic .crs-pic3{
+	background:url("../images/banner3.webp") 0/cover no-repeat;
+}
+.m-crs-cir{
+	position:absolute;
+	bottom:15px;
+	left:0;
+	right:0;
+	width:60px;
+	height:20px;
+	margin:auto;
+	vertical-align:middle;
+}
+.m-crs-cir li a{
+	display:inline-block;
+	float:left;
+	width:9px;
+	height:9px;
+	margin:5px;
+	background-color:rgba(156,217,206,.5);
+	border-radius:50%;
+}
+.m-crs-cir .crs-cir2{
+	width:10px;
+	height:10px;
+	background-color:rgba(156,217,206,1);
+}
+/*主体部分轮播图结束*/
+
+/*中心导航开始*/
+.center-nav{
+	overflow:hidden;
+	height:200px;
+	margin:20px auto;
+	border-radius:10px;
+	border:1px solid rgb(219,219,219);
+}
+.center-nav li{
+	display:inline-block;
+	float:left;
+}
+.center-nav li a{
+	display:inline-block;
+	width:304px;
+	height:200px;
+}
+/*鼠标悬停的盒子阴影*/
+.center-ac1{
+	background:url('../images/activity1.jpg') 0/cover no-repeat;
+}
+
+.center-ac2{
+	background:url('../images/activity3.png') 0/cover no-repeat;
+}
+.center-ac3{
+	background:url('../images/activity2.png') 0/cover no-repeat;
+}
+.center-ac4{
+	background:url('../images/activity4.png') 0/cover no-repeat;
+}
+.subbanner1{
+	background:url('../images/subbanner1.png') 0/cover no-repeat;
+}
+.subbanner2{
+	background:url('../images/subbanner2.jpg') 0/cover no-repeat;
+}
+.subbanner3{
+	background:url('../images/subbanner3.jpg') 0/cover no-repeat;
+}
+.subbanner4{
+	background:url('../images/subbanner4.jpg') 0/cover no-repeat;
+}
+/*中心导航结束*/
+
+/*热门商品开始*/
+.hot-goods{
+	overflow:hidden;
+	height:500px;
+	border:1px solid rgb(219,219,219);
+	background-color:rgb(250,250,250);
+	font-size:0;
+}
+.option-h{
+	position:relative;
+	border-bottom:1px solid rgb(219,219,219);
+}
+.option-tit{
+	display:inline-block;
+	padding-left:40px;
+	font-size:20px;
+	font-weight:normal;
+	line-height:50px;
+}
+.hgoods-r{
+	position:absolute;
+	top:0;
+	bottom:0;
+	margin:auto;
+	width:30px;
+	height:30px;
+	background-image:url("../images/btn.png");
+	background-size:cover;
+	background-repeat:no-repeat;
+}
+.hot-goods .hgoods-t-r1{
+	right:70px;
+	background-position:-38px 2px;
+}
+.hgoods-t-r1:hover{
+	cursor:not-allowed;
+}
+.hot-goods .hgoods-t-r2{
+	right:20px;
+	background-position:-115px 2px;
+}
+.hot-goods .hgoods-item > ul{
+	width:2440px;
+	height:450px;	
+}
+
+.option-list{
+	position:relative;
+	display:inline-block;
+	float:left;
+	background-color:rgb(255,255,255);
+}
+.option-list .item{
+	display:inline-block;
+	width:304px;
+	height:450px;
+}
+.option-list .goods-li-rt{
+	position:absolute;
+	right:20px;
+	top:20px;
+	padding:5px 20px;
+	border:1px solid rgb(208,52,28);
+	background-color:rgb(255,231,229);
+	color:rgb(208,52,28);
+	font-size:15px;
+	border-radius:20px;
+}
+.item > .goods-pic{
+	top:50px;
+	width:216px;
+	height:216px;
+}
+.option-list .item-tit{
+	margin-top:250px;
+	font-size:15px;
+	color:rgb(0,0,0);
+	font-weight:bold;
+	line-height:50px;
+}
+
+.option-list .goods-sel{
+	bottom:100px;
+	width:13px;
+	height:13px;
+	border:2px solid rgb(178,178,178);
+	vertical-align:middle;
+	border-radius:50%;
+}
+.option-list .goods-sel > img{
+	width:9px;
+	height:9px;
+	padding:2px;
+	vertical-align:middle;
+	z-index:2px;
+}
+.option-list .item-pri{
+	
+	margin:60px;
+	font-size:18px;
+	font-weight:bold;
+	color:rgb(225,10,10);
+}
+.option-list .hi-txt{
+	display:none;
+	width:300px;
+	height:40px;
+	margin:60px auto;
+	font-size:0;
+	text-align:center;
+}
+.hi-txt span{
+	width:100px;
+	height:40px;
+	padding:5px 20px;
+	border:1px solid #ccc;
+	font-size:15px;
+	line-height:40px;
+	border-radius:8px;
+	z-index:2;
+}
+.hi-txt1{
+	margin-right:10px;
+	background-color:rgb(241,241,241);
+}
+.hi-txt2{
+	background-color:rgb(96,135,229);
+	color:rgb(255,255,255);
+}
+/*热门商品结束*/
+
+
+/* 净化器及配件开始 */
+.option{
+	overflow:hidden;
+	height:952px;
+	border:1px solid #ccc;
+}
+.option-cont{
+	position:absolute;
+	top:50px;
+	width:1220px;
+	height:900px;
+}
+.option-pic{
+	float:left;
+	width:609px;
+	height:450px;
+}
+.option-pic .item-pic{
+	width:609px;
+	height:449px;
+}
+
+/* 净化器及配件结束*/
+
+/*锤子应用开始*/
+.box{
+	overflow:hidden;
+	height:350px;
+	border:1px solid rgb(219,219,219);
+	background-color:rgb(255,255,255);
+	font-size:0;
+}
+.option-rt{
+	position:absolute;
+	top:10px;
+	bottom:10px;
+	right:30px;
+	margin:auto;
+	padding:0 10px;
+	border:1px solid #ccc;
+	font-size:15px;
+	line-height:30px;
+	border-radius:5px;
+}
+.app-item{
+	display:block;
+	float:left;
+	width:304px;
+	height:300px;
+	background-color:rgba(252,252,252,1);
+}
+
+.app-item .download{
+	display:none;
+	height:200px;
+	margin:70px auto;	
+	text-align:center;
+}
+.app-item .download .box{
+	width:200px;
+	height:40px;
+	margin:20px auto;
+	padding:0 10px;
+	border:1px solid #ccc;
+	background-color:rgb(78,138,220);
+	color:rgb(255,255,255);
+	font-size:12px;
+	vertical-align:middle;
+	border-radius:10px;
+	line-height:40px;
+}
+.app-item .d-logo{
+	vertical-align:middle;
+	margin-right:10px;
+}
+
+.app-pic{
+	top:30px;
+	width:90px;
+	height:90px;
+	background:url('../images/application.png') 0/cover no-repeat;
+}
+.app-item p.mar-t-150{
+	margin-top:150px;
+}
+.app-logo{
+	position:absolute;
+	bottom:20px;
+	left:0;
+	right:0;
+	width:57px;
+	height:21px;
+	margin:auto;
+}
+.app-logo .win{
+	margin-right:20px;
+}
+.app-logo:before{
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	width:1px;
+	height:10px;
+	background-color:#ccc;
+	margin:auto;
+	content:"";
+	z-index:3;
+}
+
+.er-download{
+	display:none;
+	text-align:center;
+	font-size:15px;
+}
+.qr-code{
+	width:120px;
+	height:120px;
+	margin-top:50px;
+	margin-bottom:20px;
+}
+.to-next{
+	margin-top:15px;
+}
+
+/*锤子应用结束*/
+
+/*forum论坛开始*/
+.forum .forum-pic{
+	position:absolute;
+	top:20px;
+	left:0;
+	right:0;
+	overflow:hidden;
+	width:246px;
+	height:156px;
+	margin:auto;
+	border-radius:5px;
+}
+.forum span{
+	display:inline-block;
+	margin:0 30px;
+}
+.forum .item-tit{
+	margin-top:180px;
+	line-height:40px;
+}
+.listen{
+	margin-top:10px;
+	margin-left:30px;
+}
+/*forum论坛结束*/

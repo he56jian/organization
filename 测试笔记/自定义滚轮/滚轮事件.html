@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>滚轮滚动</title>
+    <style>
+        body, ul, li, div, p,h5{
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none
+        }
+
+        #wrap {
+            overflow: hidden;
+            position: relative;
+            width: 300px;
+            height: 500px;
+            margin: 100px auto;
+            border: 1px solid;
+            border-radius: 15px;
+        }
+
+        #box li {
+            padding-right: 30px;
+            border-top-right-radius: 30px;
+        }
+
+        #box li > h5{
+            background: red
+        }
+
+        #wrap .side_scroll {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 100%;
+            background-color: #bbb9b5;
+            border-radius: 30px;
+        }
+
+        #wrap .side_scroll .myscroll {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            background-color: #353535;
+            border-radius: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <ul id="box">
+        <li>
+            <p>1.item1</p>
+            <p>2.item2</p>
+        </li>
+    </ul>
+    <div class="side_scroll">
+        <div class="myscroll"></div>
+    </div>
+</div>
+</body>
+
+
+<script>
+	var massageHead = ['一、 学习用品 (school things) ',
+			'二、 人体 （body）', '三、 颜色 （colours）',
+			'四、 动物 （animals）', '五、 人物 （people）',
+			'六、 职业 （jobs）', '七、 食品、饮料 （food & drink）',
+			'八、 水果、蔬菜 (fruit & vegetables)', '九、 衣服 （clothes）',
+			'十、 交通工具 (vehicles) ', '十一、杂物 （other things）',
+			'十二、地点 （locations）', '十三、课程 （classes）'],
+		massageContant = ['pen钢笔 pencil铅笔'
+            ,'foot脚 head头 face脸 hair头发 nose鼻子 mouth嘴 eye眼睛 ear耳朵 arm手臂 hand手'
+            ,'red红 blue蓝 yellow黄 green绿 white白 black黑 pink粉红 purple紫'
+            ,'cat猫 dog狗 pig猪 duck鸭 rabbit兔 horse马'
+            ,'friend朋友 boy男孩 girl女孩'
+            ,'teacher教师 student学生 doctor医生 nurse护士 driver司机'
+            ,'rice米饭 bread面包 beef牛肉 milk牛奶 water水 egg蛋 fish鱼 tofu豆腐 cake蛋糕 '
+            ,'草莓 cucumber黄瓜 onion洋葱 carrot'
+            ,'pants长裤 socks袜子 shoes鞋子 sweater毛衣 coat上衣'
+            ,'bus公共汽车 train火车 boat小船 ship轮船 yacht car小汽车'
+            ,'fan风扇 light灯 teacher\'s desk讲台 picture图画；照片 wall墙壁 floor地板 curtain窗帘 trash bin垃圾箱'
+            ,' kitchen厨房 classroom教室 school学校 park公园 library图书馆 post office邮局 police office警察局 hospital医院 cinema电影院 bookstore书店 farm农场 zoo'
+            ,'Social Studies社会课 Chinese语文 math数学 PE体育课 English英语课'];
+
+	var oBox = document.getElementById('box'),
+		oWrap = document.getElementById('wrap'),
+		oScroll = document.getElementsByTagName('div')[2];//由于IE7不支持，getElementByclassName,所有改成了getElementsByTagName
+
+        var _length = massageContant.length,
+            massage = '';
+        for(var i = 0 ;i <_length ;i++){
+
+			massage += `<li><h5>${massageHead[i]}</h5><p>${massageContant[i]}</p></li>`;
+        }
+	oBox.innerHTML = massage;
+	// 初始化滚轮
+	var oShow = oWrap.offsetHeight;//显示内容的高度 he滚动条的总高度一致
+	var oMain = oBox.offsetHeight;//内容总高度
+	var oScrH = oShow / oMain * oShow;   //滚动块的高度
+	var cScorTop = oShow - oScrH;    //允许滚动的高度
+	oScroll.style.height = oScrH + 'px';//滚动块的高度/滚动条的总高度 = 显示内容的高度/内容的总高度
+
+	mouseWheelEvent(oBox, function (e) {              //滚轮事件
+		var oScrTop = parseFloat(getStyle(oScroll)['top']);     //当前滚动高度
+		e = e || window.event;  //兼容IE
+		cencalDefault(e);       //取消默认事件。
+		//使用||，前面为真时，后面不执行
+		//谷歌、IE：往下是-120，往上是120
+		//火狐：往下 是3，往上是-3
+		var change = e.wheelDelta || e.detail;
+		console.log(oScrTop);
+		oScrTop -= change;
+		if (oScrTop < 0) {
+			oScrTop = 0;
+		} else if (oScrTop > cScorTop) {
+			oScrTop = cScorTop;
+		}
+		oBox.style.marginTop = -oScrTop + 'px';
+		oScroll.style.top = oScrTop + 'px';
+
+	});
+
+	function getStyle(ele) {
+		return getComputedStyle(ele) || ele.currentStyle;
+	}
+
+	//取消默认事件，通过传入的事件取消默认
+	function cencalDefault(event) {
+		if (event.preventDefault) {//如果有preventDefault这个方法的是主流的浏览器。
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	}
+
+
+	//滚轮事件
+	function mouseWheelEvent(ele, fn, bool) {
+		//判断是否为IE浏览器，ele.addEventListener。该监听事件在非IE中才能使用，否则为undefined
+		if (ele.addEventListener) {
+			//由于火狐和大多数浏览器的滚动事件不一致，则要再做判断，使用ele.onmousewheel，存在则不是火狐，不存在则是主流浏览器。
+			//主流浏览器使用.
+			if (ele.onmousewheel === undefined) {
+				ele.addEventListener('DOMMouseScroll', fn, bool);
+			} else {
+				ele.addEventListener('mousewheel', fn, bool);
+			}
+
+		} else if (ele.attachEvent) {  //IE 浏览器的事件监听,存在为IE浏览器
+			ele.attachEvent('onmousewheel', function (e) {           //设置事件监听，并指向obox元素
+				fn.call(ele);
+			})
+		}
+	}
+</script>
+</html>

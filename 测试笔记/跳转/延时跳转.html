@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>延时跳转</title>
+    <style>
+        body, div, p {
+
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrap {
+            width: 500px;
+            height: 300px;
+            margin: 100px auto;
+            border: 1px solid;
+            background-color: bisque;
+        }
+
+        .wrap p {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <p>跳转百度页面还有:3秒</p>
+</div>
+</body>
+<script>
+	var i = 3;
+	var conObj = ['跳转百度页面还有:', '3', "秒"],
+		count = document.getElementsByTagName('p');
+        count[0].innerText = conObj.join('');
+
+
+	setTimeout(function () {
+		window.location.href = "https://www.baidu.com";
+	}, 3000);
+
+	var timer = setInterval(function () {
+		if (i < 0) {
+			clearnterval(timer);
+		} else {
+			conObj[1] = i--;
+			var str = conObj.join('');
+			count[0].innerText = str;
+		}
+	}, 1000);
+
+</script>
+</html>

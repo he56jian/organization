@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="myFn.js"></script>
+    <style>
+        body, div, img {
+            margin: 0;
+            padding: 0;
+        }
+
+        .pic {
+            margin: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="pic"><img src="images/timg0.jpg" alt="" width="500"></div>
+</body>
+
+<script>
+	var oPic = document.getElementsByTagName('img')[0];
+	scrollEvent(oPic, function (e) {
+		var e = getEvent(e);
+		var mScrollData = getScrollData(this, e).scrollExtent;
+		var nowWidth = parseFloat(getStyle(this)['width']);
+		nowWidth += mScrollData * 10;
+		nowWidth <= 200 && (nowWidth  = 200);
+		nowWidth >= 800 && (nowWidth = 800);
+		this.width = nowWidth;
+	});
+</script>
+
+</html>

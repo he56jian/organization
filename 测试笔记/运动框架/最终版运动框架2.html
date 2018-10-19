@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>最终版运动框架</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            margin: 100px auto;
+            width: 100px;
+            height: 100px;
+            background-color: #63a35c;
+            opacity: 1;
+        }
+    </style>
+    <script src="tween.js"></script>
+</head>
+<body>
+<div></div>
+<script>
+	//由于之前的旋转值是写死的，不灵活。而且没有延时执行，没有运动曲线的设置，故稍做修改
+	//background、css3的值写成函数，其参数为固定值，已经被写死，不灵活。
+	var oBox = document.getElementsByTagName('div')[0],
+		attrValue = '',
+		attrObj = {
+			width: 500,
+			height: '500',
+			opacity: 0.5,
+			transform: {
+				start: function () {
+					return {
+						rotateX: {
+							start: 0,
+							change: 180
+						},
+						rotateY: {
+							start: 360,
+							change: 60
+						}
+					}
+				},
+				up: function (attr, ele, key, time) {
+					attrValue = '';
+					for (var attrKey in attr) {
+						var _value = attr[attrKey].start + time * attr[attrKey].change;
+						attrValue += attrKey + '(' + _value + 'deg)';  //这里应该是开始加上变化的角度
+						this.style[key] = attrValue;
+					}
+				}
+			}
+		},
+		animationTime = {
+			duration: 1000,       //动画时间
+			delay: 1000,            //延时时间
+            _runStyle:1,   //1为匀速
+		};
+
+	//background、css3的值写成函数，其参数为固定值，已经被写死，不灵活。
+	endAnimation(oBox, attrObj, animationTime);
+
+	//根据时间来设置动画
+	//需要获取的值有，1、节点对象；2、需要修改的参数；3、总共花费时间；4、回调函数
+	function endAnimation(ele, attr, animationTime, callback) {
+		// 获取最开始时间
+		var startData = new Date().getTime();
+		//用于存放数据开始及结束的值
+		var attrVal = {},//每次都要清空，否则之前的参数还是会出现
+			fnAttr = {};        //存放的都是特殊样式中的样式和值。
+		// 获取初始值,并保存
+		for (var key in attr) {
+			if (typeof attr[key] === "object") {
+				//遍历要添加的值，存入对象中。
+				for (var attrKey in attr[key].start()) {
+					fnAttr[attrKey] = attr[key].start()[attrKey];
+				}
+				attrVal[key] = attr[key].up.bind(ele,fnAttr);   //把特殊对象的值传入。
+
+			} else {
+				var _start = parseFloat(getStyle(ele)[key]) || 0;
+				var _change = attr[key] - parseFloat(getStyle(ele)[key]);
+				attrVal[key] = {                                     //开始值和结束值，如果设置为改变值
+					start: _start,  //如果获取初始值没有则为0
+					end: attr[key],                                 //结束值
+					change: _change
+				}
+			}
+		}
+		fn();
+
+		//动画函数
+		function fn() {
+			if (animationTime.delay > 0) {       //首先要判断是否有延迟,如果设置了延迟为0，-1之类的也会出现错误，所以要大于0
+				(function nullFn() {
+					if (new Date().getTime() - startData < animationTime.delay) {
+						requestAnimationFrame(nullFn);
+					} else {
+						startData = new Date().getTime();   //获取的是延时过后开始的时间。
+						run(); //动画运行方法
+					}
+				})();
+			} else {
+				run();
+			}
+		}
+
+
+		function run() {
+			//时间比例，已过时间/总时间 = 已过路程/ 总路程
+			var changeTimeScale = (new Date().getTime() - startData) / animationTime.duration;
+			// 当时间比例大于等于1时，就说明时间已过最大值
+			if (changeTimeScale >= 1) {
+				setStyle(ele, attrVal, 1);
+				callback && callback();
+			} else {
+				setStyle(ele, attrVal, changeTimeScale);
+				requestAnimationFrame(run);
+			}
+		}
+	}
+
+	//设置参数，传入要设置的节点，以及要设置的属性
+	function setStyle(ele, attrval, time) {
+		for (var key in attrval) {
+
+			var step = time * attrval[key].change;         //已过路程 = 已过时间/总时间 *总路程。
+			if (key === 'opacity') {
+				ele.style[key] = step + attrval[key].start;
+			} else if (typeof attrval[key] === "function") {
+				attrval[key](ele, key, time);
+			} else {
+				ele.style[key] = step + attrval[key].start + 'px';
+			}
+		}
+	}
+
+
+	//获取初始样式
+	function getStyle(ele) {
+		return ele.currentStyle || getComputedStyle(ele);
+	}
+
+</script>
+</body>
+</html>

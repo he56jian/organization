@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>代码去重</title>
+    <style>
+        body,div{
+            margin:0;
+            padding:0;
+        }
+        div{
+            width:300px;
+            height:100px;
+            margin:100px 0 0 100px;
+            background-color: greenyellow;
+        }
+        input{
+            margin-left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+    <input type="button" value="删除重复" id="btn">
+</body>
+<script>
+    var arr = ['你好','我好','他好','他也好','你好','你好','我好'],
+        obox = document.getElementById('box'),
+        obtn = document.getElementById('btn');
+    length = arr.length;
+    for(var i = 0;i<length;i++){
+        obox.innerHTML += arr[i] +',';
+    }
+
+    obtn.onclick = function () {
+        for (var i = 0 ;i<length;i++){
+        	for(var j =length-1 ;j > i;j--){
+                if(arr[i] === arr[j]){
+                    arr.splice(j,1);
+                    // console.log(arr);
+                }
+            }
+        }
+
+        obox.innerHTML = arr.join(',');
+
+	}
+</script>
+</html>

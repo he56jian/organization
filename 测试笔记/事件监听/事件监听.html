@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body,div{
+            margin: 0;
+            padding: 0;
+        }
+        .box{
+            width:100px;
+            height:100px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="box"></div>
+</body>
+<script>
+
+    var oBox = document.getElementsByTagName('div')[0];
+	//事件监听   DOM 0级事件
+    // oBox.onclick = function (e) {
+     //    console.log(e);
+	// }
+	//
+    // DOM 2级事件
+    //主流浏览器
+
+/*
+* ele 传递需要绑定的对象
+* eventType 指定绑定的事件类型
+* eventFn 指定事件类型对于的方法
+* isCapture 判断是否捕获
+*
+* 问题：如果添加了两次点击事件，但是取消之后，只能注销最后一个事件。
+*
+* */
+
+eventBind(oBox,'click',test,false);
+eventBind(oBox,'mouseleave',function () {
+	unEventBind(oBox,'click',test,false);
+
+},false);
+
+
+function test() {
+    console.log('test');
+}
+
+    function eventBind(ele,eventType,eventFn,isCapture){
+
+	var fn = eventFn;
+    	//如果是主流浏览器
+    	if(window.addEventListener){
+    		ele.addEventListener(eventType,fn,isCapture);
+        }else{
+    		//如果是IE低版本
+            ele.attachEvent('on'+eventType,fn);
+        }
+    }
+
+    function unEventBind(ele,eventType,fn,isCapture) {
+		//如果是主流浏览器
+		if(ele.addEventListener){
+			ele.removeEventListener(eventType,fn,isCapture);
+		}else{
+			//如果是IE低版本
+			ele.detachEvent('on'+eventType,fn);
+		}
+	}
+
+
+</script>
+</html>

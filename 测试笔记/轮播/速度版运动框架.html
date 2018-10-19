@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>速度版运动框架</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            width: 100px;
+            height: 100px;
+            margin: 100px;
+            background-color: black;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<div id="box">123</div>
+<script>
+
+	//设置运动框架，思考首先要获取的参数，
+	//1.运动的对象（标签）           ele
+	//2.运动的属性（哪个属性变化）     attr
+	//3.运动的结束值（运动到什么状态） value
+	//4.运动的步长（即每次变化的长度） step
+	//5.回调函数（设置结束后操作）   callback
+
+	var oBox = document.getElementById('box');
+	animationRun(oBox, 'width', 500, 10,function () {
+		animationRun(oBox,'height',400,10);
+	});              //设置要变化的标签为box标签，变化的属性为width,要变化的结果为500,每次变化10；
+
+	window.requestAnimationFrame = window.requestAnimationFrame || function (callback) {
+		return setTimeout(callback,1000/60)
+	}
+
+	function animationRun(ele, attr, value, step, callback) {
+
+		//首先获取原本的值,并转成数值型使用parseFloat转换成数值型，会把小数位也保留（虽然小数位不精确）；如果使用parseInt会舍弃小数位。
+		var startV = parseFloat(getStyle(ele)[attr]),
+			curV = startV;                      //当前值
+
+		//判断是要收缩，还是伸张.当原本值大于终点值时，步长为删减，反之步长为添加。
+		step = (startV > value ? -step : step);
+
+		//因为是要不断添加，造成平滑添加的效果，所以做成一个函数自执行。
+		(function run() {
+			curV += step;
+			if (startV > value) {         //当开始值大于结束值时，当前值要越来越小，
+				if (curV <= value) {        //当前值小于结束值,
+					curV = value;           //设置当前值为结束值。
+					ele.style[attr] = curV + 'px';
+					callback && callback();
+				} else {
+					ele.style[attr] = curV + 'px';
+					requestAnimationFrame(run);
+				}
+			} else {
+				if (curV >= value) {          //开始值小于结束值时，当前值要越来越大，当前值大于结束值时。
+					curV = value;
+					ele.style[attr] = curV + 'px';
+					callback && callback();
+				} else {
+					//每帧执行一次run函数
+					ele.style[attr] = curV + 'px';
+					requestAnimationFrame(run);
+				}
+			}
+		})();
+
+
+	}
+
+	window.requestAnimationFrame = window.requestAnimationFrame || function (callback) {
+        return setTimeout(callback,1000/60)
+	}
+	//getStyle是一个通过标签对象，获取其元素当前属性值的函数。（不能添加属性参数，因为标签都没有找到，再使用[attr]方法会报错。）
+	//兼容IE678的方式，获取当前属性值在IE低版本为ele.currentStyle方法。
+	//使用||是因为，三目运算中 || 为或，如果前面为真，则直接返回前面的值，不处理后面的值；如果前面为假，就接着处理后面的值，真的话返回后一个值；两个都假，返回false;
+	function getStyle(ele) {
+		return ele.currentStyle || getComputedStyle(ele);
+	}
+
+</script>
+</body>
+</html>

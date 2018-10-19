@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>鼠标拖动</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            background-color: #df5000;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+
+</div>
+</body>
+<script>
+	var oBox = document.getElementsByTagName('div')[0];
+	var attr = {
+			ow: oBox.offsetWidth / 2,
+			oh: oBox.offsetHeight / 2
+		}
+
+
+	eventBind(oBox, 'mousedown', runningStart, false);
+	eventBind(oBox, 'mouseup', runningEnd, false);
+
+
+	function runningStart() {
+		eventBind(document, 'mousemove',runningMove, false);
+	}
+	function runningMove() {
+		var event = event || window.event;
+		oBox.style.left = event.clientX - attr.ow +'px';
+		oBox.style.top = event.clientY - attr.oh +'px';
+	}
+
+	function runningEnd() {
+		console.log(this);
+		unEventBind(document,'mousemove',runningMove);
+	}
+	
+	
+	//添加事件监听
+	function eventBind(ele, eventType, eventFn, isCapture) {
+		//如果是主流浏览器
+		if (window.addEventListener) {
+			ele.addEventListener(eventType, eventFn, isCapture);
+		} else {
+			//如果是IE低版本
+			ele.attachEvent('on' + eventType, eventFn);
+		}
+	}
+
+	//解除事件监听
+	function unEventBind(ele, eventType, eventFn, isCapture) {
+		//如果是主流浏览器
+		if (ele.addEventListener) {
+			ele.removeEventListener(eventType, eventFn, isCapture);
+		} else {
+			//如果是IE低版本
+			ele.detachEvent('on' + eventType, eventFn);
+		}
+	}
+</script>
+
+</html>

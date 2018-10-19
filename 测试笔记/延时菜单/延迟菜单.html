@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>延迟菜单</title>
+    <style>
+        body, div, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        body {
+            background: url('bg.jpg') center top no-repeat;
+        }
+
+        .wrap {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            margin-left: -100px;
+            width: 200px;
+            height: 320px;
+            font-size: 0;
+        }
+
+        .wrap > ul {
+            overflow: hidden;
+            padding: 5px;
+        }
+
+        .wrap > ul > li {
+            position: relative;
+            top: 320px;
+            width: 180px;
+            height: 40px;
+            padding: 5px;
+            margin-top: 2px;
+            background-color: rgba(255, 255, 255, .8);
+            font-size: 16px;
+            text-align: center;
+            line-height: 40px;
+        }
+    </style>
+    <script src="tween.js"></script>
+    <script src="animationRunning.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <ul>
+        <li>菜单1</li>
+        <li>菜单2</li>
+        <li>菜单3</li>
+        <li>菜单4</li>
+        <li>菜单5</li>
+        <li>菜单6</li>
+    </ul>
+</div>
+</body>
+<script>
+	var oLi = document.getElementsByTagName('li');
+	document.onclick = function () {
+		for (var i = 0, iL = oLi.length; i < iL; i++) {
+			animationRunning(oLi[i],{
+				top: 0,
+			}, {
+				duration:500,
+                delay:100 * i
+			},function(){
+				//音乐媒体对象
+				var oAudio = new Audio();
+				oAudio.src = '1.mp3';
+				oAudio.volume = 0.5;
+				oAudio.oncanplay = function(){
+					this.play();
+				}
+			});
+		}
+
+	}
+</script>
+</html>

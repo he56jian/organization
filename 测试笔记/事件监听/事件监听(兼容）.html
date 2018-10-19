@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="box"></div>
+<div class="box"></div>
+</body>
+<script>
+
+	var oBox = document.getElementsByTagName('div')[0];
+	var oBox1 = document.getElementsByTagName('div')[1];
+	//事件监听   DOM 0级事件
+	// oBox.onclick = function (e) {
+	//    console.log(e);
+	// }
+	//
+	// DOM 2级事件
+	//主流浏览器
+
+	/*
+    * ele 传递需要绑定的对象
+    * eventType 指定绑定的事件类型
+    * eventFn 指定事件类型对于的方法
+    * isCapture 判断是否捕获
+    *
+    * 问题：如果添加了两次点击事件，但是取消之后，只能注销最后一个事件。
+    * 所以要把事件添加入队列中，用ele.evenHandler[eventType] 保存evenType相应的函数
+    *
+    * 问题：设置多个事件，同时执行一个函数。
+    * 在传入的类型中用逗号隔开，在监听执行前先把字符串拆分成数组，在遍历数组执行。
+    * */
+
+	var fn1 = onceEvent(oBox, 'click', test1, false);
+	// var fn2 = eventBind(oBox, 'click', test2, false);
+	// var fn3 = eventBind(oBox, 'click', test3, false);
+	// var fn4 = eventBind(oBox, 'click', test4, false);
+	// eventBind(oBox1, 'click', function () {
+	// 	unEventBindOne(oBox, 'click,mouseenter', fn2, false);
+	// }, false);
+
+
+	function test4() {
+		console.log('test4');
+	}
+
+	function test1() {
+		console.log('test1');
+	}
+
+	function test2() {
+		console.log('test2');
+	}
+
+	function test3() {
+		console.log('test3');
+	}
+	function eventBind(ele, eventType, eventFn, isCapture) {
+		var fn = function () {
+			eventFn.call(this);
+		};
+		var eventTypeList = eventType.split(',');
+		for (var evtT = 0, evtL = eventTypeList.length; evtT < evtL; evtT++) {
+			eventType = eventTypeList[evtT];
+			//如果是主流浏览器
+			if (window.addEventListener) {
+				ele.addEventListener(eventType, fn, isCapture);
+			} else {
+				//如果是IE低版本
+				ele.attachEvent('on' + eventType, fn);
+			}
+			if (!ele._evenHandler) {          //如果是第一次执行，则创建ele._eventHandler为json数据类型
+				ele._evenHandler = {};
+			}
+			if (!ele._evenHandler[eventType]) {      //如果是第一次执行，创建ele._evenHandler[eventType]为数组对象。
+				ele._evenHandler[eventType] = [];
+			}
+			ele._evenHandler[eventType].push(fn);       //把每次的执行函数都存入ele._evenHandler[eventType] 中
+		}
+		return fn;
+
+	}
+
+	/**
+	 * 默认为只删除当前事件的最后一个执行函数，但是如果传入的是一个固定函数，只删除匹配该函数的事件
+	 */
+	function unEventBindOne(ele, eventType, fn, isCapture) {
+		var _key = null;
+		var eventTypeList = eventType.split(',');   //类型队列
+		for (var evtT = 0, evtL = eventTypeList.length; evtT < evtL; evtT++) {
+			if (!ele._evenHandler || !ele._evenHandler[eventTypeList[evtT]]) {
+				return false;
+			}
+			var eventFnList = ele._evenHandler[eventTypeList[evtT]];            //各个事件的处理函数队列
+			var eventFnListL = eventFnList.length;
+			if (typeof fn === "function") {//如果传入的是固定的函数，则只删除固定函数对应的事件。
+				for (var f = 0; f < eventFnListL ; f++) {
+					console.log(eventFnList[f] ,fn)
+					if (eventFnList[f] === fn) {
+						_key = f;
+						console.log(_key);
+						break;//找到之后推出循环
+					}
+				}
+			} else {                                    //默认
+				_key = eventFnListL - 1;
+			}
+			if (_key === null) {
+				continue;
+			}
+			var eventFn = eventFnList.splice(_key, 1)[0];
+			//主流浏览器
+			if (ele.addEventListener) {
+				ele.removeEventListener(eventTypeList[evtT], eventFn, isCapture);
+			} else {
+				//IE低版本
+				ele.detachEvent('on' + eventTypeList[evtT], eventFn);
+			}
+		}
+	}
+
+
+	/**
+	 * 一次删除eventType中的所有事件
+	 * @param ele
+	 * @param eventType
+	 * @param fn
+	 * @param isCapture
+	 * @returns {boolean}
+	 */
+	function unEventBindAll(ele, eventType, fn, isCapture) {
+		var eventTypeList = eventType.split(',');
+		for (var evtT = 0, evtL = eventTypeList.length; evtT < evtL; evtT++) {
+			if (!ele._evenHandler || !ele._evenHandler[eventTypeList[evtT]]) {
+				return false;
+			}
+			// 首先要获取绑定的函数，由于绑定的是数组，所以要遍历每一个函数
+			for (var ev = 0, eL = ele._evenHandler[eventTypeList[evtT]].length; ev < eL; ev++) {
+				var fn = ele._evenHandler[eventTypeList[evtT]][ev];
+				//如果是主流浏览器
+				if (ele.addEventListener) {
+					ele.removeEventListener(eventTypeList[evtT], fn, isCapture);
+				} else {
+					//如果是IE低版本
+					ele.detachEvent('on' + eventTypeList[evtT], fn);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 一次性事件
+	 * @param ele
+	 * @param eventType
+	 * @param fn
+	 * @param isCapture
+	 */
+	function onceEvent(ele, eventType, fn, isCapture) {
+		var handlerFn = eventBind(ele,eventType,function (e) {
+			var e = e || window.event;
+			fn.call(this,e);
+			console.log(ele,e.type,handlerFn,isCapture);
+			unEventBindOne(ele,e.type,handlerFn,isCapture);
+		},isCapture);
+
+	}
+
+
+</script>
+</html>

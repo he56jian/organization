@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>排序</title>
+    <style>
+        div, ul, li, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        #wrap {
+            width: 800px;
+            padding: 10px;
+            margin: 100px;
+            border: 1px solid rgba(0, 0, 0, .3);
+        }
+
+        #header > ul {
+            height: 50px;
+            background-color: rgb(248, 248, 248);
+            border: 1px solid rgba(0, 0, 0, .1);
+        }
+
+        #header > ul > li {
+            position: relative;
+            float: left;
+            padding: 10px 20px;
+            height: 30px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+        #header > ul > li:nth-last-child(1) {
+            position: relative;
+            padding: 0;
+            z-index: 12;
+        }
+
+        #header ul > li > div {
+            padding: 10px 20px;
+            height: 80px;
+        }
+
+        #header ul > li > div > p {
+            display: none;
+            height: 30px;
+            padding-bottom: 10px;
+            line-height: 30px;
+        }
+
+        #header .bgcf {
+            background-color: white;
+        }
+
+        #header .hindden {
+            display: none;
+        }
+
+        #header .show {
+            display: block;
+        }
+
+        #main {
+            width: 800px;
+        }
+
+        #main ul {
+            display: flex;
+            width: 800px;
+            margin-top: 10px;
+            font-size: 0;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        #main ul .item {
+            position: relative;
+            width: 150px;
+            height: 170px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            background-color: rgb(248, 248, 248);
+            border: 1px solid rgba(0, 0, 0, .1);
+            cursor: pointer;
+        }
+
+        .item div {
+            position: absolute;
+            top: 8px;
+            right: 0;
+            left: 0;
+            width: 120px;
+            height: 170px;
+            margin: auto;
+        }
+
+        .item div div {
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .item:nth-child(1) div div {
+            background-image: url("images/xh_img1.jpg");
+        }
+
+        .item:nth-child(2) div div {
+            background-image: url("images/xh_img2.jpg");
+        }
+
+        .item:nth-child(3) div div {
+            background-image: url("images/xh_img3.jpg");
+        }
+
+        .item:nth-child(4) div div {
+            background-image: url("images/xh_img4.jpg");
+        }
+
+        .item:nth-child(5) div div {
+            background-image: url("images/xh_img5.jpg");
+        }
+
+        .item:nth-child(6) div div {
+            background-image: url("images/xh_img6.jpg");
+        }
+
+        .item:nth-child(7) div div {
+            background-image: url("images/xh_img7.jpg");
+        }
+
+        .item:nth-child(8) div div {
+            background-image: url("images/xh_img8.jpg");
+        }
+
+        .item div p {
+            position: absolute;
+            bottom: 15px;
+            font-size: 14px;
+        }
+
+        .item > p {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 50px;
+            height: 50px;
+            background-image: url("images/price.png");
+            color: rgb(251, 255, 0);
+            font-size: 14px;
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div id="header" class="clearfix">
+        <ul class="clearfix">
+            <li>流行</li>
+            <li>热销</li>
+            <li>上新</li>
+            <li class="">
+                <div>
+                    <p class="show">价格从高到低</p>
+                    <p>价格从低到高</p>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="main">
+        <ul>
+            <li class="item">
+                <div>
+                    <div></div>
+                    <p>1#系列</p>
+                </div>
+                <p></p>
+            </li>
+            <li class="item">
+                <div>
+                    <div></div>
+                    <p>2#系列</p>
+                </div>
+                <p></p>
+            </li>
+            <li class="item">
+                <div>
+                    <div></div>
+                    <p>2#系列</p>
+                </div>
+                <p></p>
+            </li>
+            <li class="item">
+                <div>
+                    <div></div>
+                    <p>2#系列</p>
+                </div>
+                <p></p>
+            </li>
+            <li class="item">
+                <div>
+                    <div></div>
+
+                    <p>2#系列</p>
+                </div>
+                <p></p>
+            </li>
+            <li class="item">
+                <div>
+                    <div></div>
+
+                    <p>2#系列</p>
+                </div>
+                <p></p>
+            </li>
+            <li class="item">
+                <div>
+                    <div></div>
+
+                    <p>2#系列</p>
+                </div>
+                <p></p>
+            </li>
+            <li class="item">
+                <div>
+                    <div></div>
+
+                    <p>2#系列</p>
+                </div>
+                <p></p>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+<script>
+	//由于使用了absolute脱离文档流，或者使用float浮动脱离文档流，会导致撑不开父级高度。
+	var arr_price = [500, 59, 78, 68, 13, 321, 687, 987];                      //创建的价格数组。
+	var price = document.querySelectorAll('.item > p');
+	var item = document.querySelectorAll('.item');
+	var reorder = document.querySelector('#header ul > li:nth-last-child(1) div');
+	var reorderNum = document.querySelectorAll('#header ul > li div >p');
+	var arr_order = [];
+	var tran_num = 0;
+	var item_length = item.length;                                     //项目的数目
+	for (var i = 0; i < item_length; i++) {
+		price[i].innerText = '￥' + arr_price[i];
+		arr_order[i] = item[i].style.order = i;
+	}
+
+    var state = 0;
+	var length = reorderNum.length;                        //length表示排序方式数量
+	reorder.onmouseenter = function () {                //鼠标移入，显示排序方式
+
+		for (var i = 0; i < length; i++) {           //遍历所有的排序方式
+			reorderNum[i].className = 'show';
+			reorderNum[i].index = i;
+			reorderNum[i].onclick = function () {                   //绑定事件
+				for (var j = 0; j < length; j++) {                                 //所有的选项变回原色
+					reorderNum[j].style.color = '';
+				}
+				reorderNum[this.index].style.color = 'rgb(255,0,0)';        //当前选项颜色变红。
+				if (this.index === 0) {                                              //点击第一个就是从高到低排序
+					fn_reorder(true);
+					state = 0;
+				} else {
+					fn_reorder(false);
+					state = 1;
+				}
+
+				for (var i = 0; i < item_length; i++) {                        //arr_order数组存的是以前的序号，按照了新的排序方式的结果。
+					var num = arr_order[i];
+					item[num].style.order = i;
+				}
+			}
+
+		}
+		reorder.className = 'bgcf';
+	}
+
+
+	reorder.onmouseleave = function () {
+        if(state){
+            reorderNum[0].className = 'hidden';
+        }else{
+            reorderNum[1].className = 'hidden';
+
+        }
+        reorderNum[state].className = 'show';
+
+		reorder.className = '';
+	}
+	
+	function fn_reorder(toSmall) {
+
+		for (var i = 0; i < item_length - 1; i++) {                       //当点击从低到高
+			for (var j = i + 1; j < item_length; j++) {
+				if(toSmall){                                            //如果是从大到小排序
+					if (arr_price[i] < arr_price [j]) {               //当前一个大于后一个。两个调换
+						tran_num = arr_order[i];
+						arr_order[i] = arr_order[j];                //用于给后面加排序的序号
+						arr_order[j] = tran_num;
+
+						tran_num = arr_price[i];
+						arr_price[i] = arr_price[j];                    //如果不改变当前数组，其结果会变化。相当于拿第一个数一直和后面的数作比较，并没有参加排序
+						arr_price[j] = tran_num;
+					}
+				}else{
+					if (arr_price[i] > arr_price [j]) {               //当前一个大于后一个。两个调换
+						tran_num = arr_order[i];
+						arr_order[i] = arr_order[j];                //用于给后面加排序的序号
+						arr_order[j] = tran_num;
+
+						tran_num = arr_price[i];
+						arr_price[i] = arr_price[j];                    //如果不改变当前数组，其结果会变化。相当于拿第一个数一直和后面的数作比较，并没有参加排序
+						arr_price[j] = tran_num;
+					}
+                }
+
+			}
+		}
+	}
+</script>
+
+</html>

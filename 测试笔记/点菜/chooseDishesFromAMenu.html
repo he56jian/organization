@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>chooseDishesFromAMenu</title>
+    <style>
+        body, div, h2, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        #wrap {
+            overflow: hidden;
+            width: 541px;
+            margin: 100px;
+            border: 1px solid;
+            border-radius: 5px;
+        }
+
+        #wrap div {
+            float: left;
+            width: 250px;
+            padding: 10px;
+        }
+
+        #wrap div:nth-child(1) {
+            border-right: 1px solid;
+        }
+
+        h2 {
+            width: 100%;
+            padding: 10px 0;
+            border-bottom: 1px solid;
+            text-align: center;
+        }
+
+        ul > li {
+            margin: 10px 0;
+            background-color: black;
+            color: #ffff00;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div class="menu">
+        <h2>菜单</h2>
+        <ul class="menuOfDishes">
+            <li>鲜奶玉液</li>
+            <li>牛奶粥</li>
+            <li>牛奶大枣</li>
+            <li>厚奶</li>
+            <li>蛋奶</li>
+            <li>水晶之恋</li>
+        </ul>
+    </div>
+    <div class="choose">
+        <h2>点菜</h2>
+        <ul class="chooseOfMenu"></ul>
+    </div>
+</div>
+<script>
+
+    /**
+    * 点菜的想做成左边的不动，点击左边的菜单，右边出现菜单，并且有数量，单价，点击右边的，数量减少，为0时消失。
+    *
+    * */
+	var oMenu = document.getElementsByClassName('menuOfDishes')[0],
+		oChoose = document.getElementsByClassName('chooseOfMenu')[0],
+		oChooseLi = [],
+		start = true,
+		oMenuLi = document.getElementsByTagName('li');
+	_length = oMenuLi.length;
+	for (var i = 0; i < _length; i++) {
+		// oMenuLi[i].index = i;
+		oMenuLi[i].num = true;
+		oMenuLi[i].onclick = function () {
+			// upChooseLi(this.num);
+			// if (oChooseLi[this.index]) {
+			// 	oChoose.removeChild(oChooseLi[this.index]);
+			// 	oChooseLi[this.index] = this.cloneNode(true);
+			// } else {
+			// 	oChooseLi[this.index] = this.cloneNode(true);               //第一次
+			// }
+			// this.num++;
+			// oChooseLi[this.index].innerHTML = oChooseLi[this.index].innerHTML + ' ' + this.num;
+			// oChoose.appendChild(oChooseLi[this.index]);
+            if(this.num){
+			    oChoose.appendChild(this);
+				this.num = false;
+			}else{
+				oMenu.appendChild(this);
+				this.num = true;
+
+            }
+		};
+
+
+		// function upChooseLi(num) {
+        //
+		// 	for (var i = 0, iL = oChooseLi.length; i < iL; i++) {
+		// 		if(num){
+		// 		    oChooseLi[i].num = num;
+         //        }
+		// 		oChooseLi[i].onclick = function () {
+		// 			this.num--;
+		// 			if (this.num <= 0) {
+		// 				oChoose.removeChild(this);
+		// 				upChooseLi();
+		// 			} else {
+		// 				this.innerHTML = this.innerHTML + ' ' + num;
+		// 			}
+        //
+		// 		}
+        //
+			// }
+        <!--}-->
+	}
+
+</script>
+</body>
+</html>

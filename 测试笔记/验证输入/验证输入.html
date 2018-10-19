@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>验证输入</title>
+    <style>
+        body, img, div, ul, li, form, input, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        #wrap {
+            width: 300px;
+            height: 400px;
+            margin: 100px auto;
+            border: 1px solid;
+            text-align: center;
+        }
+
+        #wrap img {
+            width: 100px;
+            height: 100px;
+            margin-top: 10px;
+            border-radius: 50%;
+        }
+
+        #wrap div {
+            font-size: 0;
+        }
+
+        #wrap div li {
+            margin-top: 10px;
+            text-align: left;
+            text-indent: 2rem;
+        }
+
+        #wrap div input {
+            width: 200px;
+            font-size: 16px;
+            text-indent: .5rem;
+            margin-left: 2rem;
+            border: 0px;
+            border-bottom: 1px solid rgba(0, 0, 0, .2);
+            outline: none;
+        }
+
+        #wrap div p {
+            font-size: 12px;
+            color: rgba(0, 0, 0, .2);
+            text-align: left;
+        }
+
+        #wrap div p.warn {
+            color: rgba(255, 0, 0, 1);
+        }
+
+        #wrap div input[type='submit'] {
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <img src="images/timg0.jpg" alt="">
+    <div id="content">
+        <form action="">
+            <ul>
+                <li>
+                    <p>请输入手机号:</p>
+                    <input type="text">
+                </li>
+                <li>
+                    <p>请输入昵称：只能以字母、下划线开头</p>
+                    <input type="text">
+                </li>
+                <li>
+                    <p>请输入密码：</p>
+                    <input type="text">
+                </li>
+                <li>
+                    <p>再次输入密码：</p>
+                    <input type="text">
+                </li>
+                <li>
+                    <p>请输入邮箱：</p>
+                    <input type="text">
+                </li>
+                <li>
+                    <input type="submit">
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+	var mInp = document.getElementsByTagName('input'),
+		mP = document.getElementsByTagName('p'),
+		length = mInp.length - 1,
+		//创建一个空数组，存储输入数值
+		arr = [],
+		//regArr数组为正则判断
+		regArr = [
+			//出现一个问题：不能判断最大长度
+			//以18或者13开头，后面有9个
+			{
+				reg: /^(18|13)\d{9}/,
+				regLength: 11,
+				confirmation:false,
+			},
+			{
+				reg: /^(_|[a-zA-Z])/,//设置_开头或者a-z或者A-Z开头
+				regLength: 0,
+				confirmation:false
+			},
+			{
+				reg:/^(?=.*[0-9])(?=.*[a-zA-Z])(.{8,})$/,       //匹配同时包含数字和字母的8位
+				regLength: 8,                         //设置包括数字加英文的8位
+				confirmation:false
+			},
+			{
+				reg: /^(18|13)\d{9}/,
+				regLength: 8,
+				confirmation:true                       //标识，用于标识出是否有重新验证的信息
+			},
+			{
+				reg: /(^\w+)@\w+/,                  //前后两个字符之间有个@符号就表示邮箱地址。
+				regLength: 0,
+				confirmation:false
+			}
+
+		];
+
+
+	for (var i = 0; i < length; i++) {
+		arr[i] = mInp[i].value;
+		mInp[i].onblur = function (i) {
+			return function () {
+				if (this.value.length === 0) {
+					mP[i].className = 'warn';
+					mP[i].innerText = '请重新输入';
+				} else if (regArr[i].confirmation) {
+					if(this.value === mInp[2].value){
+						mP[i].className = '';
+						mP[i].innerText = '输入正确！';
+                    }else {
+						mP[i].className = 'warn';
+						mP[i].innerText = '输入错误！';
+					}
+				} else {
+					if (regArr[i].regLength !== 0) {
+						if (regArr[i].reg.test(this.value) && (this.value.length === regArr[i].regLength)) {       //符合phone格式的时候往下处理,一个是要符合18/13开头，后面跟9位以上数值，还要符合长度为11.
+							mP[i].className = '';
+							mP[i].innerText = '输入正确！';
+						} else {
+							mP[i].className = 'warn';
+							mP[i].innerText = '输入错误！';
+						}
+					} else {
+						if (regArr[i].reg.test(this.value)) {       //符合phone格式的时候往下处理,一个是要符合18/13开头，后面跟9位以上数值，还要符合长度为11.
+							mP[i].className = '';
+							mP[i].innerText = '输入正确！';
+						} else {
+							mP[i].className = 'warn';
+							mP[i].innerText = '输入错误！';
+						}
+					}
+				}
+
+			}
+		}(i);
+	}
+
+
+</script>
+</html>

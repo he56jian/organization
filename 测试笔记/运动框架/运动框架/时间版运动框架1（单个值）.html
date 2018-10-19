@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>时间版运动框架</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            margin: 100px;
+            width: 100px;
+            height: 100px;
+            background-color: #df5000;
+        }
+    </style>
+</head>
+<body>
+<div></div>
+</body>
+<script>
+	var oBox = document.getElementsByTagName('div')[0];
+	var changeVal ={
+		width:500,
+        height:500
+    }
+
+	timeAnimation(oBox, 'width', 500, 5000,function () {
+		timeAnimation(oBox, 'height', 500, 5000);
+	});
+
+
+	//时间版的运动框架
+	//判断需要传入的参数有，1、要处理的对象（即节点）/2、要处理的参数（是width,还是height）3、最终达到的结果 4、总共需要的时间(ms) 5、回调函数
+	function timeAnimation(ele, attr, value, time, callback) {
+		//1、获取节点刚开始的的attr值,由于获取的值是有单位的，所以要中parseFloat转成数字类型。
+		var startVal = parseFloat(getStyle(ele)[attr]),
+			startData = new Date().getTime(),//获取刚开始的时间
+			nowVal = startVal,
+			direction = 1;      //偏移值
+
+		//获取速度
+		var speed = (value - startVal) / time;
+		changeAnimation();
+
+		function changeAnimation() {
+			var changeTime = new Date().getTime() - startData,          //获取花费的时间
+
+				//当前的位置
+				curVal = speed * changeTime + startVal;                //从开始的位置开始移动，
+
+			console.log(curVal);
+			// nowVal += step;       //获取速度
+			if (curVal >= value) {            //当它大于等于最大值时，取最大值。
+				curVal = value;
+				ele.style[attr] = curVal + 'px';
+				callback && callback();
+			} else {
+				ele.style[attr] = curVal + 'px';
+				requestAnimationFrame(changeAnimation);
+			}
+
+		}
+	}
+
+
+	function getStyle(ele) {
+		return ele.currentStyle || getComputedStyle(ele);   //兼容IE写法
+	}
+
+
+</script>
+</html>

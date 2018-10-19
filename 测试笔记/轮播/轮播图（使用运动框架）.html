@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>完整版轮播图</title>
+    <script src="tween.js"></script>
+    <script src="animationRunning.js"></script>
+    <style>
+        body, div, ul, li, img {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        #wrap {
+            overflow: hidden;
+            position: relative;
+            margin: 100px auto;
+            width: 1000px;
+            border: 1px solid;
+        }
+
+        .banner ul {
+            overflow: hidden;
+            width: 1000%;
+        }
+        .banner .bin-pic{
+            position:relative;
+        }
+        .banner .bin-pic li {
+            float: left;
+            width: 10%;
+        }
+
+        .banner .bin-pic a,
+        .banner .bin-pic img {
+            display: block;
+            width: 100%;
+        }
+
+        .btn {
+            position: absolute;
+            bottom: 50%;
+            height: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn span {
+            float: left;
+            width: 50px;
+            line-height: 50px;
+            font-size: 30px;
+            background-color: rgba(255, 255, 255, .5);
+            color: #121212;
+            cursor: pointer;
+        }
+
+        .btn span + span {
+            float: right;
+        }
+        .btn span:hover{
+            background-color: rgba(255,255,255,.2);
+        }
+        .poit {
+            height: 0;
+            font-size: 0;
+            text-align: center;
+        }
+
+        .poit li {
+            position: relative;
+            display: inline-block;
+            bottom: 40px;
+            margin: 0 10px;
+            width: 20px;
+            height: 20px;
+            background-color: #aab500;
+            font-size: 20px;
+            border-radius: 50%;
+        }
+
+        .poit > li:hover,
+        .poit li.on {
+            background-color: #df5000;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div class="banner">
+        <ul class="bin-pic">
+            <li><a href=""><img src="images/timg7.jpg" alt=""></a></li>
+            <li><a href=""><img src="images/timg6.jpg" alt=""></a></li>
+            <li><a href=""><img src="images/timg5.jpg" alt=""></a></li>
+            <li><a href=""><img src="images/timg4.jpg" alt=""></a></li>
+        </ul>
+    </div>
+    <div class="btn">
+        <span>&lt;</span>
+        <span>&gt;</span>
+    </div>
+    <ul class="poit">
+    </ul>
+</div>
+</body>
+<script>
+	var oBanner = document.getElementsByClassName('banner')[0],
+		oBinPic = document.getElementsByClassName('bin-pic')[0],
+		oBinPicLi = oBinPic.getElementsByTagName('li'),
+		oBtn = document.getElementsByClassName('btn')[0],
+		oNext = oBtn.getElementsByTagName('span')[1],
+		oBack = oBtn.getElementsByTagName('span')[0],
+		oPoit = document.getElementsByClassName('poit')[0],
+		oPoitLi = oPoit.getElementsByTagName('li'),
+		_length = oBinPicLi.length,
+		_left = oBanner.offsetWidth,
+		index = 0,
+	    att = new Array(_length+1);
+	    oPoit.innerHTML = att.join('<li></li>');
+	    oPoitLi[index].className = 'on';
+
+	oBack.onclick = function () {
+		oPoitLi[index].className = '';
+		index--;
+		if(index < 0){
+			index = _length - 1;
+        }
+		animationRunning(oBinPic, {
+			left: index * -_left,
+		}, {
+			duration: 1000,
+		});
+		oPoitLi[index].className = 'on';
+
+	}
+	oNext.onclick = function () {
+		oPoitLi[index].className = '';
+		index++;
+		index %= _length ;
+		animationRunning(oBinPic, {
+			left: index * -_left,
+		}, {
+			duration: 1000
+		});
+		oPoitLi[index].className = 'on';
+	}
+
+
+</script>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查找和替换</title>
+    <style>
+        body, input, div, span {
+            margin: 0;
+            padding: 0;
+        }
+
+        #wrap {
+            width: 600px;
+            height: 300px;
+            margin: 100px;
+            padding: 10px;
+            border: 1px solid rgba(0, 0, 0, .2);
+            font-size: 0;
+        }
+
+        input {
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        input[type='text'] {
+            width: 200px;
+        }
+
+        input[type = 'button'] {
+            width: 50px;
+        }
+
+        input ~ input {
+            margin-left: 5px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        span {
+            font-size: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <input type="text" class="sea_con">
+    <input type="text" class="replace_con">
+    <input type="button" value="查找" class="search">
+    <input type="button" value="替换" class="replace">
+    <p class="text">
+    </p>
+</div>
+</body>
+<script>
+	var text = document.getElementsByClassName('text')[0],
+		text_con = '[行程特色]张家界国家森林公园与一脉相连的索溪谷、天子山两大自然保护区组成武林源，是张家界的核心景区。家界，奇峰三千，秀水八百，张家界的山多是拔地而起，山上峰峻石奇，或玲珑秀丽，或峥嵘可怖，或平展...';
+
+	text.innerHTML = text_con;
+
+	var sea_con = document.getElementsByClassName('sea_con')[0],
+		rep_con = document.getElementsByClassName('replace_con')[0],
+		btn_sear = document.getElementsByClassName('search')[0],
+		btn_rep = document.getElementsByClassName('replace')[0],
+		arr = [],
+		newSea_text = '';
+
+	btn_sear.onclick = function () {            //点击查找
+		var sea_text = sea_con.value;
+		replace(sea_text,sea_text);
+
+	}
+	btn_rep.onclick = function () {           //点击替换，空值不操作。不是空值，获取
+		var rep_text = rep_con.value;
+		var sea_text = sea_con.value;
+		replace(sea_text,rep_text)
+	}
+
+	function replace(val,content) {                                       //把val的值替换成content,并加了样式。
+		var firstIndex = text_con.indexOf(val);            //查找标识
+		if (content !== '') {
+			if (firstIndex !== -1) {
+				newSea_text = '<span>' + content + '</span>';
+				arr = text_con.split(val);                             //根据输入值拆分了字符串。
+				var arr_length = arr.length;
+				for (var n = 0; n < arr_length - 1; n++) {                      //遍历数组
+					arr[n] = arr[n] + newSea_text;
+				}
+				var newContain = arr.join('');
+				text.innerHTML = newContain;
+			}else {
+				alert('未能查找到值：' + sea_text);
+			}
+		}
+	}
+
+            // arr = text_con.split(val);                             //根据输入值拆分了字符串。
+			// for (var n = 0; n < arr.length -1;n++) {
+			// 	arr.splice(0, 0, newSea_text);
+			// }                                               //之前设置成这样的，一打开网页就死机；后面检查，发现是进入了死循环。因为arr.splice(0, 0, newSea_text);一直在增加数组元素，也在增加。判断语句n<arr.length永久为true;解决：把arr.length提取出来就好了
+</script>
+
+</html>

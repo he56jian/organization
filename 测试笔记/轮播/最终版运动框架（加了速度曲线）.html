@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>最终版运动框架</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            margin: 100px auto;
+            width: 100px;
+            height: 100px;
+            background-color: #63a35c;
+            opacity: 1;
+        }
+    </style>
+    <script src="tween.js"></script>
+    <script src="animationRunning.js"></script>
+</head>
+<body>
+<div></div>
+<script>
+	//由于之前的旋转值是写死的，不灵活。而且没有延时执行，没有运动曲线的设置，故稍做修改
+	//background、css3的值写成函数，其参数为固定值，已经被写死，不灵活。
+	var oBox = document.getElementsByTagName('div')[0],attrObj = {
+			width: 500,
+			height: '500',
+			opacity: 0.5,
+			transform: {
+				start: function () {
+					return {
+						rotateX: {
+							start: 0,
+							change: 180
+						},
+						rotateY: {
+							start: 360,
+							change: 60
+						}
+					}
+				},
+				up: function (attr, key, time,animationTime) {
+					attrValue = '';
+					for (var attrKey in attr) {
+						var _value = getStep(time, attr[attrKey].start, attr[attrKey].change, animationTime);
+						attrValue += attrKey + '(' + _value + 'deg)';  //这里应该是开始加上变化的角度
+						this.style[key] = attrValue;
+					}
+				}
+			}
+		},
+		// animationTime = {
+		// 	duration: 1000,       //动画时间
+		// 	delay: 1000,            //延时时间
+		// 	_runStyle: 8,   //1为匀速
+		// 	_runType: 2,
+		// },
+		attrValue = '';
+
+
+	//background、css3的值写成函数，其参数为固定值，已经被写死，不灵活。
+	animationRunning(oBox, attrObj, {
+		duration: 1000,       //动画时间
+		delay: 1000,            //延时时间
+		_runStyle: 8,   //1为匀速
+		_runType: 2,
+	});
+
+
+</script>
+</body>
+</html>

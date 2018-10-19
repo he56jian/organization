@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pushBoxs</title>
+    <style>
+        body, div {
+            margin: 0;
+            padding: 0;
+        }
+
+        #wrap {
+            position: relative;
+            margin: 100px;
+            width: 500px;
+            height: 500px;
+            border: 1px solid;
+        }
+
+        #box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            background-color: #333333;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div id="box"></div>
+</div>
+<script>
+	// 获取要移动小盒子,和大盒子，大盒子用来限制小盒子的移动
+	var oBox = document.getElementById('box'),
+		oWrap = document.getElementById('wrap'),
+		mBoxH = parseFloat(oBox.offsetHeight),      //获取小盒子的宽高
+		mBoxW = parseFloat(oBox.offsetWidth),
+		wBoxH = parseFloat(oWrap.offsetHeight) - 2,     //获取大盒子的宽高
+		wBoxW = parseFloat(oWrap.offsetWidth) - 2,
+		maxL = wBoxW - mBoxW,
+		maxT = wBoxH - mBoxH,
+		newT = 0,
+		newL = 0,
+		keyState = [];
+
+	document.addEventListener('keydown', function (e) {
+
+		e = e || window.event;
+		e.preventDefault() || (e.returnValue = false);
+
+		switch (e.keyCode) {
+			case 38:
+				console.log('上');
+				if (!keyState[e.keyCode]) {
+					newT -= mBoxH;
+					if (newT <= 0) {
+						newT = 0;
+					}
+					keyState[e.keyCode] = true;
+				}
+				break;
+			case 39:
+				console.log('右');
+				if (!keyState[e.keyCode]) {
+					newL += mBoxW;
+						newL = maxL;
+					}
+					keyState[e.keyCode] = true;
+				}
+				break;
+			case 40:
+				console.log('下');
+				if (!keyState[e.keyCode]) {
+					newT += mBoxH;
+					if (newT >= maxT) {
+						newT = maxT
+					}
+					keyState[e.keyCode] = true;
+				}
+				break;
+			case 37:
+				console.log('左');
+				if (!keyState[e.keyCode]) {
+					newL -= mBoxW;
+					if (newL <= 0) {
+						newL = 0;
+					}
+					keyState[e.keyCode] = true;
+				}
+				break;
+			default:
+				console.log('其他');
+				break;
+		}
+		oBox.style.top = newT + 'px';
+		oBox.style.left = newL + 'px';
+	});//设置事件监听，监听键盘点击事件
+	document.addEventListener('keyup', function (e) {
+		e = e || window.event;
+		switch (e.keyCode) {
+			case 37:
+				console.log('左键')
+				keyState[e.keyCode] = false;
+                break;
+			case 38:keyState[e.keyCode] = false;
+				break;
+			case 39:keyState[e.keyCode] = false;
+				break;
+			case 40:keyState[e.keyCode] = false;
+				break;
+            default:
+            	break;
+
+		}
+	})
+</script>
+</body>
+</html>
