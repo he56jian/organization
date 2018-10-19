@@ -4,36 +4,41 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        body,ul,li,img{
-            margin:0;
-            padding:0;
+        body, ul, li, img {
+            margin: 0;
+            padding: 0;
         }
-        li{
+
+        li {
             list-style-type: none;
         }
-        .photo{
-            width:640px;
-            height:400px;
-            margin:100px auto;
-            border:1px solid #ccc;
+
+        .photo {
+            width: 640px;
+            height: 400px;
+            margin: 100px auto;
+            border: 1px solid #ccc;
 
         }
-        ul{
-            position:relative;
-            width:100%;
-            height:100%;
+
+        ul {
+            position: relative;
+            width: 100%;
+            height: 100%;
         }
-        li{
-            float:left;
+
+        li {
+            float: left;
             width: 200px;
-            height:120px;
-            margin:10px 0 0 10px;
-            border-radius:10px;
+            height: 120px;
+            margin: 10px 0 0 10px;
+            border-radius: 10px;
         }
-        img{
-            width:200px;
-            height:120px;
-            border-radius:10px;
+
+        img {
+            width: 200px;
+            height: 120px;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -54,130 +59,171 @@
 </body>
 <script>
 	/**
-     *  想要任意排列元素的位置，需要用定位；
-     *  程序逻辑：所有图片都是可以拖拽的
-     *  1、将所有图片变成定位布局
-     *      1.1:获取li元素
-     *      1.2：获取li元素当前位置，放到数组里面
-     *      1.3：把li元素改成定位
-     *      1.4：设置位置属性值：left top
-     *
-     *  2、每个li元素是实现拖拽
-     *      元素的现在x位置left=元素原来的x位置+x2-x1
-     *      元素的现在y位置top=元素原路的y位置+y2-y1
-     *      2.1:获取元素原来位置
-     *      2.2:获取鼠标点击的位置x1,y1
-     *      2.3:获取鼠标移动的位置x2,y2
-     *      2.4:计算新位置
-     *      2.5:给元素设置新位置;
-     *
-     *      问题1:使用
-     *  js是单线程解释性语言;
-     *  读到代码,先放到任务队列中;它执行代码是根据任务队列顺序执行;任务队列是把任务放到cpu中执行;cpu中一个时刻执行一个任务,它有个时钟序列, 快速的在多个任务中切换;
-     *  如果使用定时器,它会先把代码放到定时器模块中,再放到任务队列中;这个时间比任务执行时间要长得多;
-     *  把任务2放到队列中的时候,任务1已经完成了;相当于把任务2绕了条远路;
-     *
+	 *  想要任意排列元素的位置，需要用定位；
+	 *  程序逻辑：所有图片都是可以拖拽的
+	 *  1、将所有图片变成定位布局
+	 *      1.1:获取li元素
+	 *      1.2：获取li元素当前位置，放到数组里面
+	 *      1.3：把li元素改成定位
+	 *      1.4：设置位置属性值：left top
+	 *
+	 *  2、每个li元素是实现拖拽
+	 *      元素的现在x位置left=元素原来的x位置+x2-x1
+	 *      元素的现在y位置top=元素原路的y位置+y2-y1
+	 *      2.1:获取元素原来位置
+	 *      2.2:获取鼠标点击的位置x1,y1
+	 *      2.3:获取鼠标移动的位置x2,y2
+	 *      2.4:计算新位置
+	 *      2.5:给元素设置新位置;
+	 *
+	 *      问题1:使用
+	 *  js是单线程解释性语言;
+	 *  读到代码,先放到任务队列中;它执行代码是根据任务队列顺序执行;任务队列是把任务放到cpu中执行;cpu中一个时刻执行一个任务,它有个时钟序列, 快速的在多个任务中切换;
+	 *  如果使用定时器,它会先把代码放到定时器模块中,再放到任务队列中;这个时间比任务执行时间要长得多;
+	 *  把任务2放到队列中的时候,任务1已经完成了;相当于把任务2绕了条远路;
+	 *
 	 */
 
-    //1、将所有的li变成定位布局
-        //最好获取的是不变的位置；有利于计算的稳定性；
-    var mLi = document.getElementsByTagName('li');
-    var mliOffset = [];
-    for(var i=0,len = mLi.length;i<len;i++){
+		//1、将所有的li变成定位布局
+		//最好获取的是不变的位置；有利于计算的稳定性；
+	var mLi = document.getElementsByTagName('li');
+	var mliOffset = [];
+	for (var i = 0, len = mLi.length; i < len; i++) {
 
-    	//
-        // mliOffset.push([mLi[i].offsetTop,mLi[i].offsetLeft]);
-        // mLi[i].style.position= 'absolute';         //通过js设置元素属性时,其值一定是一个string;
-        // mLi[i].style.top = mliOffset[i][0] + 'px';
-        // mLi[i].style.left = mliOffset[i][1] + 'px';
-        // mLi[i].style.margin = 0;
+		//
+		// mliOffset.push([mLi[i].offsetTop,mLi[i].offsetLeft]);
+		// mLi[i].style.position= 'absolute';         //通过js设置元素属性时,其值一定是一个string;
+		// mLi[i].style.top = mliOffset[i][0] + 'px';
+		// mLi[i].style.left = mliOffset[i][1] + 'px';
+		// mLi[i].style.margin = 0;
 		//问题:   执行时,所以元素都会堆叠在一起;
-        // 	js是单线程解释性语言;
-	    // *  读到代码,先放到任务队列中;它执行代码是根据任务队列顺序执行;任务队列是把任务放到cpu中执行;cpu中一个时刻执行一个任务,它有个时钟序列, 快速的在多个任务中切换;
-	    // *  如果使用定时器,它会先把代码放到定时器模块中,再放到任务队列中;这个时间比任务执行时间要长得多;
-	    // *  把任务2放到队列中的时候,任务1已经完成了;相当于把任务2绕了条远路;
-        //读取元素属性比设置元素属性慢得多;
-        //浏览器线程;
-				mliOffset.push([mLi[i].offsetTop,mLi[i].offsetLeft]);
-        (function(i){
+		// 	js是单线程解释性语言;
+		// *  读到代码,先放到任务队列中;它执行代码是根据任务队列顺序执行;任务队列是把任务放到cpu中执行;cpu中一个时刻执行一个任务,它有个时钟序列, 快速的在多个任务中切换;
+		// *  如果使用定时器,它会先把代码放到定时器模块中,再放到任务队列中;这个时间比任务执行时间要长得多;
+		// *  把任务2放到队列中的时候,任务1已经完成了;相当于把任务2绕了条远路;
+		//读取元素属性比设置元素属性慢得多;
+		//浏览器线程;
+		mliOffset.push([mLi[i].offsetTop, mLi[i].offsetLeft]);
+		(function (i) {
 			setTimeout(function () {
-				mLi[i].style.position= 'absolute';         //通过js设置元素属性时,其值一定是一个string;
+				mLi[i].style.position = 'absolute';         //通过js设置元素属性时,其值一定是一个string;
 				mLi[i].style.top = mliOffset[i][0] + 'px';
 				mLi[i].style.left = mliOffset[i][1] + 'px';
-			    mLi[i].style.margin = 0;
-				},0)
-        })(i);
-    }
+				mLi[i].style.margin = 0;
+			}, 0)
+		})(i);
+	}
 
-    //2.每个li元素实现拖拽;
-    var mPhoto = document.getElementsByClassName('photo')[0];
-    mPhoto.addEventListener('mousedown',drag);
-    mPhoto.addEventListener('mousemove',drag);
-    mPhoto.addEventListener('mouseup',drag);
-    //使用一个函数,然后进行分流,性能好些;
-    //使用同一个函数,会在每点击时一直触发移动事件;
-    //添加一个判断元素,是否点中元素;
-    //每个case相当于一个function,其内部作用域只能用于自身;
-    //如果大量数据为一个业务服务,不要命名太多变量,用一个对象存放就好;如果变量命名越多,全局被污染越严重;
-    var data = {
-    	taggle:false,//是否点中元素
-        ele:'',//当前选中元素
-        startX:0,
-        startY:0,
-        clickX:0,
-        clickY:0,
-        moveX:0,
-        moveY:0
-    }
-    function drag(e){
-    	// console.log(e.target);      //e.target获取鼠标下的最底标签
-    	var e = window.event;       //一个对象,包含了鼠标位置/鼠标事件;鼠标类型
-        e.preventDefault();
-        switch(e.type){
-            case 'mousedown' :
-            	if(e.target.parentNode.tagName === 'LI'){       //鼠标指向了li标签;
+	//2.每个li元素实现拖拽;
+	var mPhoto = document.getElementsByClassName('photo')[0];
+	document.addEventListener('mousedown', drag.bind(mPhoto));
+	document.addEventListener('mousemove', drag.bind(mPhoto));
+	document.addEventListener('mouseup', drag.bind(mPhoto));
+	//使用一个函数,然后进行分流,性能好些;
+	//使用同一个函数,会在每点击时一直触发移动事件;
+	//添加一个判断元素,是否点中元素;
+	//每个case相当于一个function,其内部作用域只能用于自身;
+	//如果大量数据为一个业务服务,不要命名太多变量,用一个对象存放就好;如果变量命名越多,全局被污染越严重;
+	var data = {
+		toggle: false,//是否点中元素
+		ele: '',//当前选中元素
+		startX: 0,           //开始的x位置
+		startY: 0,
+		clickX: 0,           //鼠标的位置
+		clickY: 0,
+		moveX: 0,            //移动的位置；
+		moveY: 0,
+		trigger: ''           //用于判断是否碰撞成功
+	},xR,yR;
+
+	function drag(e) {
+		// console.log(e.target);      //e.target获取鼠标下的最底标签
+		var e = window.event;       //一个对象,包含了鼠标位置/鼠标事件;鼠标类型
+		e.preventDefault();
+		switch (e.type) {
+			case 'mousedown' :
+				if (e.target.parentNode.tagName === 'LI') {       //鼠标指向了li标签;并且按下了鼠标
 					data.toggle = true;
-					data.ele = e.target.parentNode;
-					data.startX = data.ele.offsetLeft;
-					data.startY = data.ele.offsetTop;
-                    data.clickX = e.clientX;
-                    data.clickY = e.clientY;
-                    data.ele.style.zIndex = 666;
-                }
-            	;break;
-            case 'mousemove' :
-            	if(data.toggle){
-            		//获取鼠标移动的位置X2,Y2
-                    data.moveX = e.clientX;
-                    data.moveY = e.clientY;
-                    var xoffset = data.startX + data.moveX -data.clickX;
-                    var yoffset = data.startY + data.moveY -data.clickY;
-                    //给元素设置新位置
-                    data.ele.style.left = xoffset + 'px';
-                    data.ele.style.top = yoffset + 'px';
-                    var xR = data.moveX - mPhoto.offsetLeft;
-                    var yR = data.moveY - mPhoto.offsetTop;
-                    for(var n =0,len=mli.length;n<len;n++){
-                    	if(
-                    		data.ele!=mLi[n]&&
-                    		xR>mLi[n].offsetLeft &&
-                            xR<mli[n].offsetLeft + 200 && yR>mLi[n].offsetTop && yR<mLi[n].offsetTop + 120){                    //但是一移动还是会和自身碰撞;  所以一开始要判断不是自身
+					data.ele = e.target.parentNode;             //获取其元素对象
+					data.startX = data.ele.offsetLeft;                        //获取其元素左边距离
+					data.startY = data.ele.offsetTop;                         //获取元素上边距离；
+					data.clickX = e.clientX;
+					data.clickY = e.clientY;
+					data.ele.style.zIndex = 666;
 
-                        }
-                    }
+				}
 
-                    //设置好了之后,有一个阻止移动的图片挡着;是一个默认属性;使用return false没有,因为有是哪个事件;使用e.preventDefault()清除默认;
-                    //默认第一个元素在所有元素下面;
-                    //鼠标是最直接的输入源;用户体验;直观简洁;
-                    //因为e.clientX/e.clientY是相对于html的,和xoffset/yoffset没有可比性;所以要转换下它老爸;
-            	}
-            	;break;
-            case 'mouseup' :
-				data.toggle = false;
-            	;break;
-        }
-    }
+				;
+				break;
+			case 'mousemove' :                                    //移动了鼠标；
+				if (data.toggle) {
+					//获取鼠标新的移动的位置X2,Y2
+					data.moveX = e.clientX;
+					data.moveY = e.clientY;
+					var xoffset = data.startX + data.moveX - data.clickX;
+					var yoffset = data.startY + data.moveY - data.clickY;
+					xR = data.moveX - mPhoto.offsetLeft;   //获取当前鼠标相对于父级节点的left；
+					yR = data.moveY - mPhoto.offsetTop;     //获取当前鼠标相对于父级节点top；
+					//给元素设置新位置
+					data.ele.style.left = xoffset + 'px';
+					data.ele.style.top = yoffset + 'px';
+					for (var n = 0, len = mLi.length; n < len; n++) {            //遍历所有图片；
+						mLi[n].style.transform = 'scale(1)';
+						mLi[n].style.boxShadow = '';
+						mLi[n].style.zIndex = 0;
+						data.ele.style.zIndex = 1;
+						if (
+							data.ele != mLi[n] &&
+							xR > mLi[n].offsetLeft &&
+							xR < mLi[n].offsetLeft + 200 && yR > mLi[n].offsetTop && yR < mLi[n].offsetTop + 120) {                    //但是一移动还是会和自身碰撞;  所以一开始要判断不是自身
+							mLi[n].style.boxShadow = '0 0 5px #ff9900';
+							mLi[n].style.transform = 'scale(1.01)';
+							data.trigger = mLi[n];
+						}
+					}
 
+					//设置好了之后,有一个阻止移动的图片挡着;是一个默认属性;使用return false没有,因为有是哪个事件;使用e.preventDefault()清除默认;
+					//默认第一个元素在所有元素下面;
+					//鼠标是最直接的输入源;用户体验;直观简洁;
+					//因为e.clientX/e.clientY是相对于html的,和xoffset/yoffset没有可比性;所以要转换下它老爸;
+				}
+				;
+				break;
+			case 'mouseup' :                                        //抬起了鼠标
+				if (data.toggle) {               //要先判断点击事件对象是否为li
+					data.toggle = false;
+					if (data.trigger &&
+                        xR > data.trigger.offsetLeft &&
+                        xR < data.trigger.offsetLeft + 200 &&
+                        yR > data.trigger.offsetTop &&
+                        yR < data.trigger.offsetTop + 120) {               //碰撞成功；
+						//判断抬起的鼠标位置是否在最后一个元素的范围内，不在则回到原位
+						data.ele.style.left = data.trigger.offsetLeft + 'px';               //offsetLeft:获取到定位父级的left
+						data.ele.style.top = data.trigger.offsetTop + 'px';
+						data.trigger.style.left = data.startX + 'px';
+						data.trigger.style.top = data.startY + 'px';
+						data.trigger.style.transform = 'scale(1)';
+						data.trigger.style.boxShadow = '';
+						data.trigger = '';
+					} else {
+						data.ele.style.left = data.startX + 'px';
+						data.ele.style.top = data.startY + 'px';
+					}
+					;
+					break;
+				}
+		}
+	}
+
+
+	//出现的问题1：鼠标快速移动的时候会脱离图片；
+	//解决：事件响应的速度跟不上鼠标移动的速度；修改成监听的是document的事件，绑定mphoto改变this;
+	//出现的问题2：拖拽了一个图片之后，直接点击就能实现切换；
+	//解决：是因为碰撞了之后data.trigger有数据了，就一直能执行转换的动作；在转换成功后清空data.trigger即可；
+	//出现的问题3：在空白地方鼠标按下后，再到元素中鼠标抬起，会出现异常；
+	//解决：在鼠标抬起事件的时候添加一个判断语句，判断是否点击了li标签；
+    //出现的问题4：在移动选中图片的过程，直接略过一张图片到空白处鼠标抬起，选中的图片会和略过的最后一张图片交换位置；
+    //解决：鼠标抬起事件里，在是否碰撞判断语句中添加用于判断鼠标抬起的位置是否在碰撞的最后一个元素范围里的语句；
 
 </script>
 
