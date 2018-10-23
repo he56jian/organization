@@ -230,7 +230,6 @@ util.type.isBooleanObject(value):   用于判断是否为布尔值对象；
 >```
 const http = require('http')
 const server = http.createServer((req,res)=>{ }
-/*
     在其回调函数中，参数req为请求体对象，res为响应；
     从浏览器输入网站，把请求发到对应的后台时，该请求信息被node封装成了request请求提对象，即req,跟请求相关的都放在req中；
     而后台返回给客户端的数据为res对象；
@@ -267,7 +266,18 @@ const server = http.createServer((req,res)=>{ }
 server.listen(3000,host)    //开启监听端口，host可不写；
 >```
 
+####mongodb模块
+>######说明：
+>用于便于处理mongodb数据库
+>######使用：
+>1. 导入模块：npm i mongodb
+>2. 调用模块：var mongodb = require('mongodb');
+>3. 创建数据库对象：var server = new mongodb.Server('localhost',27017,{auto_reconnect:true});
+>4. 创建操作的子库对象var db = new mongodb.Db('mydb',server,{safe:true});
+>5. 开始操作：db.open(function(err,db){})要做回调函数中操作；
+>6. 
 
+>######参考：https://www.cnblogs.com/sexintercourse/p/6485381.html
 
 
 
